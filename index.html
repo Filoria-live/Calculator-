@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dima Calculator</title>
+<title>Калькулятор</title>
 
 <style>
 * {
@@ -48,11 +48,7 @@ h2 {
 }
 
 #previous {
-    color: #829286;
-    min-height: 25px;
-    font-size: 16px;
-    white-space: nowrap;
-    overflow-x: auto;
+    display: none;
 }
 
 #current {
@@ -108,7 +104,7 @@ button:active {
 
 <div class="calculator">
 
-    <h2>DIMA CALCULATOR</h2>
+    <h2>КАЛЬКУЛЯТОР</h2>
 
     <div class="display">
         <div id="previous"></div>
@@ -150,11 +146,9 @@ let expression = "";
 let resetNext = false;
 
 const currentDisplay = document.getElementById("current");
-const previousDisplay = document.getElementById("previous");
 
 function update() {
     currentDisplay.textContent = expression || "0";
-    previousDisplay.textContent = "";
 }
 
 function digit(value) {
@@ -164,9 +158,9 @@ function digit(value) {
         resetNext = false;
     }
 
-    if (value === "." && expression.split(/[+\-*/]/).pop().includes(".")) {
-        return;
-    }
+    let lastNumber = expression.split(/[+\-*/]/).pop();
+
+    if (value === "." && lastNumber.includes(".")) return;
 
     expression += value;
     update();
@@ -174,11 +168,13 @@ function digit(value) {
 
 function chooseOperator(op) {
 
-    resetNext = false;
+    if (resetNext) {
+        resetNext = false;
+    }
 
     if (!expression) return;
 
-    if (/[+\-*/]$/.test(expression)) {
+    if (/[+\-*/.]$/.test(expression)) {
         expression = expression.slice(0, -1);
     }
 
@@ -213,8 +209,8 @@ function calculate() {
 
     } catch (error) {
 
-        currentDisplay.textContent = "Ошибка";
         expression = "";
+        currentDisplay.textContent = "Ошибка";
     }
 }
 
@@ -238,7 +234,7 @@ function backspace() {
 
 function percent() {
 
-    if (!expression) return;
+    if (!expression || resetNext) return;
 
     let match = expression.match(/(\d+\.?\d*)$/);
 
