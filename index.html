@@ -47,10 +47,10 @@ h2, h3 {
     padding: 18px;
     min-height: 85px;
     margin-bottom: 15px;
+    overflow-x: auto;
 }
 
 #current {
-    display: block;
     width: 100%;
     background: transparent;
     border: none;
@@ -60,10 +60,8 @@ h2, h3 {
     text-align: right;
     font-family: Arial, sans-serif;
     caret-color: #8bd69c;
-}
-
-#current::selection {
-    background: #426e4b;
+    user-select: none;
+    white-space: nowrap;
 }
 
 .buttons {
@@ -81,6 +79,7 @@ button {
     color: white;
     cursor: pointer;
     transition: 0.12s;
+    touch-action: manipulation;
 }
 
 button:active {
@@ -113,6 +112,25 @@ button:active {
 
 .scientific .special {
     background: #604b36;
+}
+
+.scientific .power {
+    background: #568b60;
+    color: white;
+    font-weight: bold;
+}
+
+.cursor-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.cursor-controls button {
+    flex: 1;
+    min-height: 42px;
+    font-size: 17px;
+    background: #26352a;
 }
 
 @media (min-width: 700px) {
@@ -157,8 +175,14 @@ button:active {
         placeholder="0"
         autocomplete="off"
         spellcheck="false"
-        aria-label="Математическое выражение"
+        inputmode="none"
+        readonly
     >
+</div>
+
+<div class="cursor-controls">
+    <button onclick="moveCursor(-1)">← Курсор</button>
+    <button onclick="moveCursor(1)">Курсор →</button>
 </div>
 
 <div class="buttons">
@@ -196,7 +220,7 @@ button:active {
 
 <div class="buttons">
 
-<button onclick="insert('/')">a/b</button>
+<button class="power" onclick="insert('^')">xʸ</button>
 <button onclick="insert('^2')">x²</button>
 <button onclick="insert('^3')">x³</button>
 <button onclick="squareRoot()">√</button>
@@ -211,7 +235,7 @@ button:active {
 <button onclick="insert('(')">(</button>
 <button onclick="insert(')')">)</button>
 
-<button onclick="insert('^')">xʸ</button>
+<button onclick="fraction()">a/b</button>
 <button onclick="toggleSign()">±</button>
 <button onclick="factorial()">n!</button>
 <button onclick="insert('.')">,</button>
@@ -226,15 +250,16 @@ button:active {
 const input = document.getElementById("current");
 
 let expression = "";
+let cursor = 0;
 let resetNext = false;
-
-input.addEventListener("input", () => {
-    expression = input.value;
-    resetNext = false;
-});
 
 function sync() {
     expression = input.value;
+}
+
+function update() {
+    input.value = expression;
+    cursor = Math.min(cursor, expression.length);
 }
 
 function insert(value) {
@@ -243,24 +268,32 @@ function insert(value) {
 
     if (resetNext) {
         expression = "";
-        input.value = "";
+        cursor = 0;
         resetNext = false;
     }
 
-    const start = input.selectionStart;
-    const end = input.selectionEnd;
+    expression =
+        expression.slice(0, cursor) +
+        value +
+        expression.slice(cursor);
 
-    input.setRangeText(value, start, end, "end");
+    cursor += value.length;
 
-    sync();
-    input.focus();
+    update();
+}
+
+function moveCursor(direction) {
+    cursor = Math.max(
+        0,
+        Math.min(expression.length, cursor + direction)
+    );
 }
 
 function clearAll() {
     expression = "";
-    input.value = "";
+    cursor = 0;
     resetNext = false;
-    input.focus();
+    update();
 }
 
 function backspace() {
@@ -272,36 +305,32 @@ function backspace() {
         return;
     }
 
-    const start = input.selectionStart;
-    const end = input.selectionEnd;
+    if (cursor > 0) {
+        expression =
+            expression.slice(0, cursor - 1) +
+            expression.slice(cursor);
 
-    if (start !== end) {
-        input.setRangeText("", start, end, "start");
-    } else if (start > 0) {
-        input.setRangeText("", start - 1, start, "start");
+        cursor--;
     }
 
-    sync();
-    input.focus();
-}
-
-function addResult(value) {
-    expression = String(value);
-    input.value = expression;
-    resetNext = true;
+    update();
 }
 
 function getLastNumber() {
-    sync();
 
-    const before = input.value.slice(0, input.selectionStart);
-    const match = before.match(/(?:\d+(?:\.\d*)?|\.\d+)$/);
+    const before = expression.slice(0, cursor);
 
-    return match ? {
+    const match = before.match(
+        /(?:\d+(?:\.\d*)?|\.\d+)$/
+    );
+
+    if (!match) return null;
+
+    return {
         value: Number(match[0]),
-        start: input.selectionStart - match[0].length,
-        end: input.selectionStart
-    } : null;
+        start: cursor - match[0].length,
+        end: cursor
+    };
 }
 
 function replaceLastNumber(value) {
@@ -310,26 +339,24 @@ function replaceLastNumber(value) {
 
     if (!item) return;
 
-    input.setRangeText(
-        String(value),
-        item.start,
-        item.end,
-        "end"
-    );
+    expression =
+        expression.slice(0, item.start) +
+        String(value) +
+        expression.slice(item.end);
 
-    sync();
-    input.focus();
+    cursor = item.start + String(value).length;
+
+    update();
 }
 
 function percent() {
     const item = getLastNumber();
-
     if (!item) return;
-
     replaceLastNumber(item.value / 100);
 }
 
 function toggleSign() {
+
     const item = getLastNumber();
 
     if (!item) return;
@@ -338,6 +365,7 @@ function toggleSign() {
 }
 
 function squareRoot() {
+
     const item = getLastNumber();
 
     if (!item || item.value < 0) return;
@@ -365,6 +393,7 @@ function trig(type) {
 }
 
 function logarithm() {
+
     const item = getLastNumber();
 
     if (!item || item.value <= 0) return;
@@ -373,11 +402,21 @@ function logarithm() {
 }
 
 function naturalLog() {
+
     const item = getLastNumber();
 
     if (!item || item.value <= 0) return;
 
     replaceLastNumber(Math.log(item.value));
+}
+
+function fraction() {
+
+    const item = getLastNumber();
+
+    if (!item) return;
+
+    insert("/");
 }
 
 function factorial() {
@@ -396,8 +435,6 @@ function factorial() {
 
     replaceLastNumber(result);
 }
-
-// Математический парсер
 
 function evaluate(source) {
 
@@ -423,11 +460,10 @@ function evaluate(source) {
             let value = add();
 
             if (tokens[position] !== ")") {
-                throw new Error("Скобки");
+                throw new Error();
             }
 
             position++;
-
             return value;
         }
 
@@ -438,11 +474,10 @@ function evaluate(source) {
 
         if (token === undefined ||
             !Number.isFinite(Number(token))) {
-            throw new Error("Число");
+            throw new Error();
         }
 
         position++;
-
         return Number(token);
     }
 
@@ -483,11 +518,8 @@ function evaluate(source) {
         ) {
             let op = tokens[position++];
 
-            if (op === "*") {
-                value *= unary();
-            } else {
-                value /= unary();
-            }
+            if (op === "*") value *= unary();
+            else value /= unary();
         }
 
         return value;
@@ -503,11 +535,8 @@ function evaluate(source) {
         ) {
             let op = tokens[position++];
 
-            if (op === "+") {
-                value += multiply();
-            } else {
-                value -= multiply();
-            }
+            if (op === "+") value += multiply();
+            else value -= multiply();
         }
 
         return value;
@@ -517,7 +546,7 @@ function evaluate(source) {
 
     if (position !== tokens.length ||
         !Number.isFinite(result)) {
-        throw new Error("Ошибка вычисления");
+        throw new Error();
     }
 
     return result;
@@ -525,42 +554,36 @@ function evaluate(source) {
 
 function calculate() {
 
-    sync();
-
     if (!expression) return;
 
     try {
 
         const result = evaluate(expression);
 
-        addResult(Number(result.toPrecision(12)));
+        if (!Number.isFinite(result)) {
+            throw new Error();
+        }
+
+        expression = String(Number(result.toPrecision(12)));
+        cursor = expression.length;
+        resetNext = true;
+
+        update();
 
     } catch (error) {
 
-        input.value = "Ошибка";
-        expression = "";
+        expression = "Ошибка";
+        cursor = expression.length;
         resetNext = true;
-    }
 
-    input.focus();
+        update();
+    }
 }
 
-// Вычисление по Enter
-
-input.addEventListener("keydown", function(event) {
-
-    if (event.key === "Enter") {
-        event.preventDefault();
-        calculate();
-    }
-
-    if (event.key === "Escape") {
-        clearAll();
-    }
-
-});
+update();
 
 </script>
 
 </body>
-</html>
+    </html>
+    
