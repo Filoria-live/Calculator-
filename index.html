@@ -23,57 +23,57 @@ body {
     padding: 20px;
 }
 
-.calculator {
+.app {
     width: 100%;
-    max-width: 380px;
+    max-width: 440px;
+}
+
+.calculator {
     background: #1c241e;
-    padding: 22px;
-    border-radius: 25px;
+    padding: 18px;
+    border-radius: 23px;
     box-shadow: 0 10px 40px #0008;
+    margin-bottom: 15px;
 }
 
 h2 {
     text-align: center;
     color: #8bd69c;
+    margin-top: 5px;
 }
 
 .display {
     background: #0d120e;
     border-radius: 15px;
-    padding: 20px;
-    min-height: 110px;
-    margin-bottom: 20px;
+    padding: 18px;
+    min-height: 85px;
+    margin-bottom: 15px;
     text-align: right;
     overflow: hidden;
 }
 
-#previous {
-    display: none;
-}
-
 #current {
-    font-size: 36px;
-    margin-top: 10px;
+    font-size: 32px;
     white-space: nowrap;
     overflow-x: auto;
-    overflow-y: hidden;
     direction: ltr;
 }
 
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 9px;
 }
 
 button {
     border: none;
-    border-radius: 15px;
-    height: 65px;
-    font-size: 23px;
+    border-radius: 13px;
+    min-height: 57px;
+    font-size: 21px;
     background: #303b32;
     color: white;
     cursor: pointer;
+    transition: 0.12s;
 }
 
 button:active {
@@ -97,47 +97,127 @@ button:active {
 .zero {
     grid-column: span 2;
 }
+
+.scientific {
+    background: #1c241e;
+    padding: 18px;
+    border-radius: 23px;
+    box-shadow: 0 10px 40px #0008;
+}
+
+.scientific h3 {
+    text-align: center;
+    color: #8bd69c;
+    margin-top: 0;
+}
+
+.scientific button {
+    background: #355b40;
+    font-size: 18px;
+    min-height: 52px;
+}
+
+.scientific .special {
+    background: #604b36;
+}
+
+@media (min-width: 700px) {
+    .app {
+        max-width: 650px;
+    }
+
+    .calculator,
+    .scientific {
+        padding: 25px;
+    }
+
+    button {
+        min-height: 75px;
+        font-size: 26px;
+    }
+
+    .scientific button {
+        min-height: 65px;
+        font-size: 22px;
+    }
+
+    #current {
+        font-size: 42px;
+    }
+}
 </style>
 </head>
 
 <body>
 
+<div class="app">
+
 <div class="calculator">
 
-    <h2>КАЛЬКУЛЯТОР</h2>
+<h2>КАЛЬКУЛЯТОР</h2>
 
-    <div class="display">
-        <div id="previous"></div>
-        <div id="current">0</div>
-    </div>
+<div class="display">
+    <div id="current">0</div>
+</div>
 
-    <div class="buttons">
+<div class="buttons">
 
-        <button class="special" onclick="clearAll()">AC</button>
-        <button class="special" onclick="backspace()">⌫</button>
-        <button class="special" onclick="percent()">%</button>
-        <button class="operator" onclick="chooseOperator('/')">÷</button>
+<button class="special" onclick="clearAll()">AC</button>
+<button class="special" onclick="backspace()">⌫</button>
+<button class="special" onclick="percent()">%</button>
+<button class="operator" onclick="addOperator('/')">÷</button>
 
-        <button onclick="digit('7')">7</button>
-        <button onclick="digit('8')">8</button>
-        <button onclick="digit('9')">9</button>
-        <button class="operator" onclick="chooseOperator('*')">×</button>
+<button onclick="digit('7')">7</button>
+<button onclick="digit('8')">8</button>
+<button onclick="digit('9')">9</button>
+<button class="operator" onclick="addOperator('*')">×</button>
 
-        <button onclick="digit('4')">4</button>
-        <button onclick="digit('5')">5</button>
-        <button onclick="digit('6')">6</button>
-        <button class="operator" onclick="chooseOperator('-')">−</button>
+<button onclick="digit('4')">4</button>
+<button onclick="digit('5')">5</button>
+<button onclick="digit('6')">6</button>
+<button class="operator" onclick="addOperator('-')">−</button>
 
-        <button onclick="digit('1')">1</button>
-        <button onclick="digit('2')">2</button>
-        <button onclick="digit('3')">3</button>
-        <button class="operator" onclick="chooseOperator('+')">+</button>
+<button onclick="digit('1')">1</button>
+<button onclick="digit('2')">2</button>
+<button onclick="digit('3')">3</button>
+<button class="operator" onclick="addOperator('+')">+</button>
 
-        <button class="zero" onclick="digit('0')">0</button>
-        <button onclick="digit('.')">.</button>
-        <button class="equals" onclick="calculate()">=</button>
+<button class="zero" onclick="digit('0')">0</button>
+<button onclick="digit('.')">.</button>
+<button class="equals" onclick="calculate()">=</button>
 
-    </div>
+</div>
+</div>
+
+<div class="scientific">
+
+<h3>НАУЧНЫЕ ФУНКЦИИ</h3>
+
+<div class="buttons">
+
+<button onclick="fraction()">a/b</button>
+<button onclick="power(2)">x²</button>
+<button onclick="power(3)">x³</button>
+<button onclick="root()">√</button>
+
+<button onclick="trig('sin')">sin</button>
+<button onclick="trig('cos')">cos</button>
+<button onclick="trig('tan')">tan</button>
+<button onclick="constant('Math.PI')">π</button>
+
+<button onclick="logarithm()">log</button>
+<button onclick="naturalLog()">ln</button>
+<button onclick="digit('(')">(</button>
+<button onclick="digit(')')">)</button>
+
+<button onclick="addOperator('^')">xʸ</button>
+<button onclick="toggleSign()">±</button>
+<button onclick="factorial()">n!</button>
+<button onclick="digit('.')">,</button>
+
+</div>
+</div>
+
 </div>
 
 <script>
@@ -145,10 +225,10 @@ button:active {
 let expression = "";
 let resetNext = false;
 
-const currentDisplay = document.getElementById("current");
+const display = document.getElementById("current");
 
 function update() {
-    currentDisplay.textContent = expression || "0";
+    display.textContent = expression || "0";
 }
 
 function digit(value) {
@@ -158,23 +238,31 @@ function digit(value) {
         resetNext = false;
     }
 
-    let lastNumber = expression.split(/[+\-*/]/).pop();
+    if (value === ".") {
+        let last = expression.split(/[+\-*/^()]/).pop();
 
-    if (value === "." && lastNumber.includes(".")) return;
+        if (last.includes(".")) return;
+
+        if (!last) value = "0.";
+    }
 
     expression += value;
     update();
 }
 
-function chooseOperator(op) {
+function addOperator(op) {
 
-    if (resetNext) {
-        resetNext = false;
+    if (resetNext) resetNext = false;
+
+    if (!expression) {
+        if (op === "-") {
+            expression = "-";
+            update();
+        }
+        return;
     }
 
-    if (!expression) return;
-
-    if (/[+\-*/.]$/.test(expression)) {
+    if (/[+\-*/^.]$/.test(expression)) {
         expression = expression.slice(0, -1);
     }
 
@@ -188,34 +276,111 @@ function calculate() {
 
     try {
 
-        if (!/^[0-9+\-*/.() ]+$/.test(expression)) {
-            throw new Error("Invalid expression");
-        }
-
-        if (/[+\-*/.]$/.test(expression)) return;
-
-        let result = Function(
-            '"use strict"; return (' + expression + ')'
-        )();
+        let result = evaluate(expression);
 
         if (!Number.isFinite(result)) {
             throw new Error("Math error");
         }
 
         expression = String(Number(result.toPrecision(12)));
-
         resetNext = true;
         update();
 
     } catch (error) {
-
         expression = "";
-        currentDisplay.textContent = "Ошибка";
+        display.textContent = "Ошибка";
     }
 }
 
-function clearAll() {
+// Безопасный разбор математических выражений
+function evaluate(source) {
 
+    let tokens = source.match(
+        /(?:\d+(?:\.\d*)?|\.\d+)|[()+\-*/^]/g
+    );
+
+    if (!tokens || tokens.join("") !== source.replace(/\s/g, "")) {
+        throw new Error("Invalid expression");
+    }
+
+    let position = 0;
+
+    function primary() {
+        let token = tokens[position];
+
+        if (token === "+") {
+            position++;
+            return primary();
+        }
+
+        if (token === "-") {
+            position++;
+            return -primary();
+        }
+
+        if (token === "(") {
+            position++;
+            let value = add();
+            if (tokens[position] !== ")") throw new Error();
+            position++;
+            return value;
+        }
+
+        if (token === undefined || isNaN(Number(token))) {
+            throw new Error();
+        }
+
+        position++;
+        return Number(token);
+    }
+
+    function power() {
+        let value = primary();
+
+        if (tokens[position] === "^") {
+            position++;
+            value = Math.pow(value, power());
+        }
+
+        return value;
+    }
+
+    function multiply() {
+        let value = power();
+
+        while (tokens[position] === "*" || tokens[position] === "/") {
+            let op = tokens[position++];
+
+            if (op === "*") value *= power();
+            else value /= power();
+        }
+
+        return value;
+    }
+
+    function add() {
+        let value = multiply();
+
+        while (tokens[position] === "+" || tokens[position] === "-") {
+            let op = tokens[position++];
+
+            if (op === "+") value += multiply();
+            else value -= multiply();
+        }
+
+        return value;
+    }
+
+    let result = add();
+
+    if (position !== tokens.length || !Number.isFinite(result)) {
+        throw new Error();
+    }
+
+    return result;
+}
+
+function clearAll() {
     expression = "";
     resetNext = false;
     update();
@@ -236,10 +401,9 @@ function percent() {
 
     if (!expression || resetNext) return;
 
-    let match = expression.match(/(\d+\.?\d*)$/);
+    let match = expression.match(/(\d+(?:\.\d*)?|\.\d+)$/);
 
     if (match) {
-
         let value = Number(match[0]) / 100;
 
         expression =
@@ -247,6 +411,144 @@ function percent() {
 
         update();
     }
+}
+
+function getLastNumber() {
+
+    let match = expression.match(/(?:\d+(?:\.\d*)?|\.\d+)$/);
+
+    return match ? Number(match[0]) : null;
+}
+
+function replaceLastNumber(value) {
+
+    let match = expression.match(/(?:\d+(?:\.\d*)?|\.\d+)$/);
+
+    if (match) {
+        expression =
+            expression.slice(0, -match[0].length) + value;
+    } else {
+        expression += value;
+    }
+
+    update();
+}
+
+function power(n) {
+
+    if (!expression || resetNext) {
+        if (resetNext) resetNext = false;
+        return;
+    }
+
+    let value = getLastNumber();
+
+    if (value === null) return;
+
+    replaceLastNumber("(" + value + "^" + n + ")");
+}
+
+function root() {
+
+    let value = getLastNumber();
+
+    if (value === null || value < 0) return;
+
+    replaceLastNumber(String(Math.sqrt(value)));
+}
+
+function trig(type) {
+
+    let value = getLastNumber();
+
+    if (value === null) return;
+
+    let radians = value * Math.PI / 180;
+    let result;
+
+    if (type === "sin") result = Math.sin(radians);
+    if (type === "cos") result = Math.cos(radians);
+    if (type === "tan") result = Math.tan(radians);
+
+    if (!Number.isFinite(result)) return;
+
+    replaceLastNumber(String(Number(result.toPrecision(12))));
+}
+
+function constant(value) {
+
+    if (resetNext) {
+        expression = "";
+        resetNext = false;
+    }
+
+    expression += String(Math.PI);
+    update();
+}
+
+function fraction() {
+
+    let match = expression.match(/(\d+(?:\.\d*)?|\.\d+)$/);
+
+    if (!match) return;
+
+    let numerator = match[0];
+
+    let denominator = prompt("Введите знаменатель:");
+
+    if (denominator === null) return;
+
+    denominator = Number(denominator);
+
+    if (!Number.isFinite(denominator) || denominator === 0) {
+        alert("Неверный знаменатель");
+        return;
+    }
+
+    replaceLastNumber("(" + numerator + "/" + denominator + ")");
+}
+
+function logarithm() {
+
+    let value = getLastNumber();
+
+    if (value === null || value <= 0) return;
+
+    replaceLastNumber(String(Math.log10(value)));
+}
+
+function naturalLog() {
+
+    let value = getLastNumber();
+
+    if (value === null || value <= 0) return;
+
+    replaceLastNumber(String(Math.log(value)));
+}
+
+function toggleSign() {
+
+    let value = getLastNumber();
+
+    if (value === null) return;
+
+    replaceLastNumber(String(-value));
+}
+
+function factorial() {
+
+    let value = getLastNumber();
+
+    if (value === null || value < 0 ||
+        !Number.isInteger(value) || value > 170) return;
+
+    let result = 1;
+
+    for (let i = 2; i <= value; i++) {
+        result *= i;
+    }
+
+    replaceLastNumber(String(result));
 }
 
 </script>
