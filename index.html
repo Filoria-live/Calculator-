@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> Calculator</title>
+<title>Dima Calculator</title>
 
 <style>
 * {
@@ -102,6 +102,7 @@ button:active {
 <body>
 
 <div class="calculator">
+
     <h2>DIMA CALCULATOR</h2>
 
     <div class="display">
@@ -110,6 +111,7 @@ button:active {
     </div>
 
     <div class="buttons">
+
         <button class="special" onclick="clearAll()">AC</button>
         <button class="special" onclick="backspace()">⌫</button>
         <button class="special" onclick="percent()">%</button>
@@ -133,99 +135,120 @@ button:active {
         <button class="zero" onclick="digit('0')">0</button>
         <button onclick="digit('.')">.</button>
         <button class="equals" onclick="calculate()">=</button>
+
     </div>
 </div>
 
 <script>
-let current = "0";
-let previous = "";
-let operator = null;
+
+let expression = "";
 let resetNext = false;
 
 const currentDisplay = document.getElementById("current");
 const previousDisplay = document.getElementById("previous");
 
 function update() {
-    currentDisplay.textContent = current;
-    previousDisplay.textContent = previous;
+    currentDisplay.textContent = expression || "0";
+    previousDisplay.textContent = "";
 }
 
 function digit(value) {
+
     if (resetNext) {
-        current = value === "." ? "0." : value;
+        expression = "";
         resetNext = false;
-    } else if (value === "." && current.includes(".")) {
-        return;
-    } else {
-        current = current === "0" && value !== "." 
-            ? value 
-            : current + value;
     }
+
+    if (value === "." && expression.split(/[+\-*/]/).pop().includes(".")) {
+        return;
+    }
+
+    expression += value;
     update();
 }
 
 function chooseOperator(op) {
-    if (operator !== null && !resetNext) {
-        calculate();
+
+    resetNext = false;
+
+    if (!expression) return;
+
+    if (/[+\-*/]$/.test(expression)) {
+        expression = expression.slice(0, -1);
     }
 
-    previous = current;
-    operator = op;
-    resetNext = true;
+    expression += op;
     update();
 }
 
 function calculate() {
-    if (operator === null) return;
 
-    let a = Number(previous);
-    let b = Number(current);
-    let result;
+    if (!expression) return;
 
-    switch (operator) {
-        case "+": result = a + b; break;
-        case "-": result = a - b; break;
-        case "*": result = a * b; break;
-        case "/":
-            if (b === 0) {
-                current = "Ошибка";
-                operator = null;
-                previous = "";
-                resetNext = true;
-                update();
-                return;
-            }
-            result = a / b;
-            break;
+    try {
+
+        if (!/^[0-9+\-*/.() ]+$/.test(expression)) {
+            throw new Error("Invalid expression");
+        }
+
+        if (/[+\-*/.]$/.test(expression)) return;
+
+        let result = Function(
+            '"use strict"; return (' + expression + ')'
+        )();
+
+        if (!Number.isFinite(result)) {
+            throw new Error("Math error");
+        }
+
+        expression = String(Number(result.toPrecision(12)));
+
+        resetNext = true;
+        update();
+
+    } catch (error) {
+
+        currentDisplay.textContent = "Ошибка";
+        expression = "";
     }
-
-    current = String(Number(result.toPrecision(12)));
-    previous = "";
-    operator = null;
-    resetNext = true;
-    update();
 }
 
 function clearAll() {
-    current = "0";
-    previous = "";
-    operator = null;
+
+    expression = "";
     resetNext = false;
     update();
 }
 
 function backspace() {
-    if (resetNext) return;
-    current = current.length > 1 ? current.slice(0, -1) : "0";
+
+    if (resetNext) {
+        clearAll();
+        return;
+    }
+
+    expression = expression.slice(0, -1);
     update();
 }
 
 function percent() {
-    current = String(Number(current) / 100);
-    update();
+
+    if (!expression) return;
+
+    let match = expression.match(/(\d+\.?\d*)$/);
+
+    if (match) {
+
+        let value = Number(match[0]) / 100;
+
+        expression =
+            expression.slice(0, -match[0].length) + value;
+
+        update();
+    }
 }
+
 </script>
 
 </body>
-  </html>
-  
+</html>
