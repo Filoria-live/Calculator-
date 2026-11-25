@@ -20,7 +20,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 18px;
 }
 
 .app {
@@ -28,7 +28,7 @@ body {
     max-width: 440px;
 }
 
-.calculator {
+.calculator, .scientific {
     background: #1c241e;
     padding: 18px;
     border-radius: 23px;
@@ -36,10 +36,9 @@ body {
     margin-bottom: 15px;
 }
 
-h2 {
+h2, h3 {
     text-align: center;
     color: #8bd69c;
-    margin-top: 5px;
 }
 
 .display {
@@ -48,15 +47,23 @@ h2 {
     padding: 18px;
     min-height: 85px;
     margin-bottom: 15px;
-    text-align: right;
-    overflow: hidden;
 }
 
 #current {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
     font-size: 32px;
-    white-space: nowrap;
-    overflow-x: auto;
-    direction: ltr;
+    text-align: right;
+    font-family: Arial, sans-serif;
+    caret-color: #8bd69c;
+}
+
+#current::selection {
+    background: #426e4b;
 }
 
 .buttons {
@@ -98,19 +105,6 @@ button:active {
     grid-column: span 2;
 }
 
-.scientific {
-    background: #1c241e;
-    padding: 18px;
-    border-radius: 23px;
-    box-shadow: 0 10px 40px #0008;
-}
-
-.scientific h3 {
-    text-align: center;
-    color: #8bd69c;
-    margin-top: 0;
-}
-
 .scientific button {
     background: #355b40;
     font-size: 18px;
@@ -126,8 +120,7 @@ button:active {
         max-width: 650px;
     }
 
-    .calculator,
-    .scientific {
+    .calculator, .scientific {
         padding: 25px;
     }
 
@@ -157,7 +150,15 @@ button:active {
 <h2>КАЛЬКУЛЯТОР</h2>
 
 <div class="display">
-    <div id="current">0</div>
+    <input
+        id="current"
+        type="text"
+        value=""
+        placeholder="0"
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Математическое выражение"
+    >
 </div>
 
 <div class="buttons">
@@ -165,25 +166,25 @@ button:active {
 <button class="special" onclick="clearAll()">AC</button>
 <button class="special" onclick="backspace()">⌫</button>
 <button class="special" onclick="percent()">%</button>
-<button class="operator" onclick="addOperator('/')">÷</button>
+<button class="operator" onclick="insert('/')">÷</button>
 
-<button onclick="digit('7')">7</button>
-<button onclick="digit('8')">8</button>
-<button onclick="digit('9')">9</button>
-<button class="operator" onclick="addOperator('*')">×</button>
+<button onclick="insert('7')">7</button>
+<button onclick="insert('8')">8</button>
+<button onclick="insert('9')">9</button>
+<button class="operator" onclick="insert('*')">×</button>
 
-<button onclick="digit('4')">4</button>
-<button onclick="digit('5')">5</button>
-<button onclick="digit('6')">6</button>
-<button class="operator" onclick="addOperator('-')">−</button>
+<button onclick="insert('4')">4</button>
+<button onclick="insert('5')">5</button>
+<button onclick="insert('6')">6</button>
+<button class="operator" onclick="insert('-')">−</button>
 
-<button onclick="digit('1')">1</button>
-<button onclick="digit('2')">2</button>
-<button onclick="digit('3')">3</button>
-<button class="operator" onclick="addOperator('+')">+</button>
+<button onclick="insert('1')">1</button>
+<button onclick="insert('2')">2</button>
+<button onclick="insert('3')">3</button>
+<button class="operator" onclick="insert('+')">+</button>
 
-<button class="zero" onclick="digit('0')">0</button>
-<button onclick="digit('.')">.</button>
+<button class="zero" onclick="insert('0')">0</button>
+<button onclick="insert('.')">.</button>
 <button class="equals" onclick="calculate()">=</button>
 
 </div>
@@ -195,25 +196,25 @@ button:active {
 
 <div class="buttons">
 
-<button onclick="fraction()">a/b</button>
-<button onclick="power(2)">x²</button>
-<button onclick="power(3)">x³</button>
-<button onclick="root()">√</button>
+<button onclick="insert('/')">a/b</button>
+<button onclick="insert('^2')">x²</button>
+<button onclick="insert('^3')">x³</button>
+<button onclick="squareRoot()">√</button>
 
 <button onclick="trig('sin')">sin</button>
 <button onclick="trig('cos')">cos</button>
 <button onclick="trig('tan')">tan</button>
-<button onclick="constant('Math.PI')">π</button>
+<button onclick="insert('Math.PI')">π</button>
 
 <button onclick="logarithm()">log</button>
 <button onclick="naturalLog()">ln</button>
-<button onclick="digit('(')">(</button>
-<button onclick="digit(')')">)</button>
+<button onclick="insert('(')">(</button>
+<button onclick="insert(')')">)</button>
 
-<button onclick="addOperator('^')">xʸ</button>
+<button onclick="insert('^')">xʸ</button>
 <button onclick="toggleSign()">±</button>
 <button onclick="factorial()">n!</button>
-<button onclick="digit('.')">,</button>
+<button onclick="insert('.')">,</button>
 
 </div>
 </div>
@@ -222,248 +223,136 @@ button:active {
 
 <script>
 
+const input = document.getElementById("current");
+
 let expression = "";
 let resetNext = false;
 
-const display = document.getElementById("current");
+input.addEventListener("input", () => {
+    expression = input.value;
+    resetNext = false;
+});
 
-function update() {
-    display.textContent = expression || "0";
+function sync() {
+    expression = input.value;
 }
 
-function digit(value) {
+function insert(value) {
+
+    sync();
 
     if (resetNext) {
         expression = "";
+        input.value = "";
         resetNext = false;
     }
 
-    if (value === ".") {
-        let last = expression.split(/[+\-*/^()]/).pop();
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
 
-        if (last.includes(".")) return;
+    input.setRangeText(value, start, end, "end");
 
-        if (!last) value = "0.";
-    }
-
-    expression += value;
-    update();
-}
-
-function addOperator(op) {
-
-    if (resetNext) resetNext = false;
-
-    if (!expression) {
-        if (op === "-") {
-            expression = "-";
-            update();
-        }
-        return;
-    }
-
-    if (/[+\-*/^.]$/.test(expression)) {
-        expression = expression.slice(0, -1);
-    }
-
-    expression += op;
-    update();
-}
-
-function calculate() {
-
-    if (!expression) return;
-
-    try {
-
-        let result = evaluate(expression);
-
-        if (!Number.isFinite(result)) {
-            throw new Error("Math error");
-        }
-
-        expression = String(Number(result.toPrecision(12)));
-        resetNext = true;
-        update();
-
-    } catch (error) {
-        expression = "";
-        display.textContent = "Ошибка";
-    }
-}
-
-// Безопасный разбор математических выражений
-function evaluate(source) {
-
-    let tokens = source.match(
-        /(?:\d+(?:\.\d*)?|\.\d+)|[()+\-*/^]/g
-    );
-
-    if (!tokens || tokens.join("") !== source.replace(/\s/g, "")) {
-        throw new Error("Invalid expression");
-    }
-
-    let position = 0;
-
-    function primary() {
-        let token = tokens[position];
-
-        if (token === "+") {
-            position++;
-            return primary();
-        }
-
-        if (token === "-") {
-            position++;
-            return -primary();
-        }
-
-        if (token === "(") {
-            position++;
-            let value = add();
-            if (tokens[position] !== ")") throw new Error();
-            position++;
-            return value;
-        }
-
-        if (token === undefined || isNaN(Number(token))) {
-            throw new Error();
-        }
-
-        position++;
-        return Number(token);
-    }
-
-    function power() {
-        let value = primary();
-
-        if (tokens[position] === "^") {
-            position++;
-            value = Math.pow(value, power());
-        }
-
-        return value;
-    }
-
-    function multiply() {
-        let value = power();
-
-        while (tokens[position] === "*" || tokens[position] === "/") {
-            let op = tokens[position++];
-
-            if (op === "*") value *= power();
-            else value /= power();
-        }
-
-        return value;
-    }
-
-    function add() {
-        let value = multiply();
-
-        while (tokens[position] === "+" || tokens[position] === "-") {
-            let op = tokens[position++];
-
-            if (op === "+") value += multiply();
-            else value -= multiply();
-        }
-
-        return value;
-    }
-
-    let result = add();
-
-    if (position !== tokens.length || !Number.isFinite(result)) {
-        throw new Error();
-    }
-
-    return result;
+    sync();
+    input.focus();
 }
 
 function clearAll() {
     expression = "";
+    input.value = "";
     resetNext = false;
-    update();
+    input.focus();
 }
 
 function backspace() {
+
+    sync();
 
     if (resetNext) {
         clearAll();
         return;
     }
 
-    expression = expression.slice(0, -1);
-    update();
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+
+    if (start !== end) {
+        input.setRangeText("", start, end, "start");
+    } else if (start > 0) {
+        input.setRangeText("", start - 1, start, "start");
+    }
+
+    sync();
+    input.focus();
 }
 
-function percent() {
-
-    if (!expression || resetNext) return;
-
-    let match = expression.match(/(\d+(?:\.\d*)?|\.\d+)$/);
-
-    if (match) {
-        let value = Number(match[0]) / 100;
-
-        expression =
-            expression.slice(0, -match[0].length) + value;
-
-        update();
-    }
+function addResult(value) {
+    expression = String(value);
+    input.value = expression;
+    resetNext = true;
 }
 
 function getLastNumber() {
+    sync();
 
-    let match = expression.match(/(?:\d+(?:\.\d*)?|\.\d+)$/);
+    const before = input.value.slice(0, input.selectionStart);
+    const match = before.match(/(?:\d+(?:\.\d*)?|\.\d+)$/);
 
-    return match ? Number(match[0]) : null;
+    return match ? {
+        value: Number(match[0]),
+        start: input.selectionStart - match[0].length,
+        end: input.selectionStart
+    } : null;
 }
 
 function replaceLastNumber(value) {
 
-    let match = expression.match(/(?:\d+(?:\.\d*)?|\.\d+)$/);
+    const item = getLastNumber();
 
-    if (match) {
-        expression =
-            expression.slice(0, -match[0].length) + value;
-    } else {
-        expression += value;
-    }
+    if (!item) return;
 
-    update();
+    input.setRangeText(
+        String(value),
+        item.start,
+        item.end,
+        "end"
+    );
+
+    sync();
+    input.focus();
 }
 
-function power(n) {
+function percent() {
+    const item = getLastNumber();
 
-    if (!expression || resetNext) {
-        if (resetNext) resetNext = false;
-        return;
-    }
+    if (!item) return;
 
-    let value = getLastNumber();
-
-    if (value === null) return;
-
-    replaceLastNumber("(" + value + "^" + n + ")");
+    replaceLastNumber(item.value / 100);
 }
 
-function root() {
+function toggleSign() {
+    const item = getLastNumber();
 
-    let value = getLastNumber();
+    if (!item) return;
 
-    if (value === null || value < 0) return;
+    replaceLastNumber(-item.value);
+}
 
-    replaceLastNumber(String(Math.sqrt(value)));
+function squareRoot() {
+    const item = getLastNumber();
+
+    if (!item || item.value < 0) return;
+
+    replaceLastNumber(Math.sqrt(item.value));
 }
 
 function trig(type) {
 
-    let value = getLastNumber();
+    const item = getLastNumber();
 
-    if (value === null) return;
+    if (!item) return;
 
-    let radians = value * Math.PI / 180;
+    const radians = item.value * Math.PI / 180;
+
     let result;
 
     if (type === "sin") result = Math.sin(radians);
@@ -472,84 +361,204 @@ function trig(type) {
 
     if (!Number.isFinite(result)) return;
 
-    replaceLastNumber(String(Number(result.toPrecision(12))));
-}
-
-function constant(value) {
-
-    if (resetNext) {
-        expression = "";
-        resetNext = false;
-    }
-
-    expression += String(Math.PI);
-    update();
-}
-
-function fraction() {
-
-    let match = expression.match(/(\d+(?:\.\d*)?|\.\d+)$/);
-
-    if (!match) return;
-
-    let numerator = match[0];
-
-    let denominator = prompt("Введите знаменатель:");
-
-    if (denominator === null) return;
-
-    denominator = Number(denominator);
-
-    if (!Number.isFinite(denominator) || denominator === 0) {
-        alert("Неверный знаменатель");
-        return;
-    }
-
-    replaceLastNumber("(" + numerator + "/" + denominator + ")");
+    replaceLastNumber(Number(result.toPrecision(12)));
 }
 
 function logarithm() {
+    const item = getLastNumber();
 
-    let value = getLastNumber();
+    if (!item || item.value <= 0) return;
 
-    if (value === null || value <= 0) return;
-
-    replaceLastNumber(String(Math.log10(value)));
+    replaceLastNumber(Math.log10(item.value));
 }
 
 function naturalLog() {
+    const item = getLastNumber();
 
-    let value = getLastNumber();
+    if (!item || item.value <= 0) return;
 
-    if (value === null || value <= 0) return;
-
-    replaceLastNumber(String(Math.log(value)));
-}
-
-function toggleSign() {
-
-    let value = getLastNumber();
-
-    if (value === null) return;
-
-    replaceLastNumber(String(-value));
+    replaceLastNumber(Math.log(item.value));
 }
 
 function factorial() {
 
-    let value = getLastNumber();
+    const item = getLastNumber();
 
-    if (value === null || value < 0 ||
-        !Number.isInteger(value) || value > 170) return;
+    if (!item || item.value < 0 ||
+        !Number.isInteger(item.value) ||
+        item.value > 170) return;
 
     let result = 1;
 
-    for (let i = 2; i <= value; i++) {
+    for (let i = 2; i <= item.value; i++) {
         result *= i;
     }
 
-    replaceLastNumber(String(result));
+    replaceLastNumber(result);
 }
+
+// Математический парсер
+
+function evaluate(source) {
+
+    source = source.replace(/\s/g, "");
+
+    const tokens = source.match(
+        /(?:\d+(?:\.\d*)?|\.\d+)|Math\.PI|[()+\-*/^]/g
+    );
+
+    if (!tokens || tokens.join("") !== source) {
+        throw new Error("Ошибка выражения");
+    }
+
+    let position = 0;
+
+    function primary() {
+
+        let token = tokens[position];
+
+        if (token === "(") {
+            position++;
+
+            let value = add();
+
+            if (tokens[position] !== ")") {
+                throw new Error("Скобки");
+            }
+
+            position++;
+
+            return value;
+        }
+
+        if (token === "Math.PI") {
+            position++;
+            return Math.PI;
+        }
+
+        if (token === undefined ||
+            !Number.isFinite(Number(token))) {
+            throw new Error("Число");
+        }
+
+        position++;
+
+        return Number(token);
+    }
+
+    function power() {
+
+        let value = primary();
+
+        if (tokens[position] === "^") {
+            position++;
+            value = Math.pow(value, unary());
+        }
+
+        return value;
+    }
+
+    function unary() {
+
+        if (tokens[position] === "-") {
+            position++;
+            return -unary();
+        }
+
+        if (tokens[position] === "+") {
+            position++;
+            return unary();
+        }
+
+        return power();
+    }
+
+    function multiply() {
+
+        let value = unary();
+
+        while (
+            tokens[position] === "*" ||
+            tokens[position] === "/"
+        ) {
+            let op = tokens[position++];
+
+            if (op === "*") {
+                value *= unary();
+            } else {
+                value /= unary();
+            }
+        }
+
+        return value;
+    }
+
+    function add() {
+
+        let value = multiply();
+
+        while (
+            tokens[position] === "+" ||
+            tokens[position] === "-"
+        ) {
+            let op = tokens[position++];
+
+            if (op === "+") {
+                value += multiply();
+            } else {
+                value -= multiply();
+            }
+        }
+
+        return value;
+    }
+
+    let result = add();
+
+    if (position !== tokens.length ||
+        !Number.isFinite(result)) {
+        throw new Error("Ошибка вычисления");
+    }
+
+    return result;
+}
+
+function calculate() {
+
+    sync();
+
+    if (!expression) return;
+
+    try {
+
+        const result = evaluate(expression);
+
+        addResult(Number(result.toPrecision(12)));
+
+    } catch (error) {
+
+        input.value = "Ошибка";
+        expression = "";
+        resetNext = true;
+    }
+
+    input.focus();
+}
+
+// Вычисление по Enter
+
+input.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        event.preventDefault();
+        calculate();
+    }
+
+    if (event.key === "Escape") {
+        clearAll();
+    }
+
+});
 
 </script>
 
