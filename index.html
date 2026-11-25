@@ -1,1 +1,231 @@
 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Calculator</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #101410;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.calculator {
+    width: 100%;
+    max-width: 380px;
+    background: #1c241e;
+    padding: 22px;
+    border-radius: 25px;
+    box-shadow: 0 10px 40px #0008;
+}
+
+h2 {
+    text-align: center;
+    color: #8bd69c;
+}
+
+.display {
+    background: #0d120e;
+    border-radius: 15px;
+    padding: 20px;
+    min-height: 110px;
+    margin-bottom: 20px;
+    text-align: right;
+    overflow: hidden;
+}
+
+#previous {
+    color: #829286;
+    min-height: 25px;
+    font-size: 16px;
+}
+
+#current {
+    font-size: 36px;
+    margin-top: 10px;
+    overflow-wrap: anywhere;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+button {
+    border: none;
+    border-radius: 15px;
+    height: 65px;
+    font-size: 23px;
+    background: #303b32;
+    color: white;
+    cursor: pointer;
+}
+
+button:active {
+    transform: scale(0.94);
+    background: #526b57;
+}
+
+.operator {
+    background: #355b40;
+}
+
+.special {
+    background: #604b36;
+}
+
+.equals {
+    background: #71b77d;
+    color: #101810;
+}
+
+.zero {
+    grid-column: span 2;
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+    <h2>DIMA CALCULATOR</h2>
+
+    <div class="display">
+        <div id="previous"></div>
+        <div id="current">0</div>
+    </div>
+
+    <div class="buttons">
+        <button class="special" onclick="clearAll()">AC</button>
+        <button class="special" onclick="backspace()">⌫</button>
+        <button class="special" onclick="percent()">%</button>
+        <button class="operator" onclick="chooseOperator('/')">÷</button>
+
+        <button onclick="digit('7')">7</button>
+        <button onclick="digit('8')">8</button>
+        <button onclick="digit('9')">9</button>
+        <button class="operator" onclick="chooseOperator('*')">×</button>
+
+        <button onclick="digit('4')">4</button>
+        <button onclick="digit('5')">5</button>
+        <button onclick="digit('6')">6</button>
+        <button class="operator" onclick="chooseOperator('-')">−</button>
+
+        <button onclick="digit('1')">1</button>
+        <button onclick="digit('2')">2</button>
+        <button onclick="digit('3')">3</button>
+        <button class="operator" onclick="chooseOperator('+')">+</button>
+
+        <button class="zero" onclick="digit('0')">0</button>
+        <button onclick="digit('.')">.</button>
+        <button class="equals" onclick="calculate()">=</button>
+    </div>
+</div>
+
+<script>
+let current = "0";
+let previous = "";
+let operator = null;
+let resetNext = false;
+
+const currentDisplay = document.getElementById("current");
+const previousDisplay = document.getElementById("previous");
+
+function update() {
+    currentDisplay.textContent = current;
+    previousDisplay.textContent = previous;
+}
+
+function digit(value) {
+    if (resetNext) {
+        current = value === "." ? "0." : value;
+        resetNext = false;
+    } else if (value === "." && current.includes(".")) {
+        return;
+    } else {
+        current = current === "0" && value !== "." 
+            ? value 
+            : current + value;
+    }
+    update();
+}
+
+function chooseOperator(op) {
+    if (operator !== null && !resetNext) {
+        calculate();
+    }
+
+    previous = current;
+    operator = op;
+    resetNext = true;
+    update();
+}
+
+function calculate() {
+    if (operator === null) return;
+
+    let a = Number(previous);
+    let b = Number(current);
+    let result;
+
+    switch (operator) {
+        case "+": result = a + b; break;
+        case "-": result = a - b; break;
+        case "*": result = a * b; break;
+        case "/":
+            if (b === 0) {
+                current = "Ошибка";
+                operator = null;
+                previous = "";
+                resetNext = true;
+                update();
+                return;
+            }
+            result = a / b;
+            break;
+    }
+
+    current = String(Number(result.toPrecision(12)));
+    previous = "";
+    operator = null;
+    resetNext = true;
+    update();
+}
+
+function clearAll() {
+    current = "0";
+    previous = "";
+    operator = null;
+    resetNext = false;
+    update();
+}
+
+function backspace() {
+    if (resetNext) return;
+    current = current.length > 1 ? current.slice(0, -1) : "0";
+    update();
+}
+
+function percent() {
+    current = String(Number(current) / 100);
+    update();
+}
+</script>
+
+</body>
+  </html>
+  
