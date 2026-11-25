@@ -11,16 +11,118 @@
     box-sizing: border-box;
 }
 
+:root {
+    --bg: #101410;
+    --card: #1c241e;
+    --display: #0d120e;
+    --text: #ffffff;
+    --heading: #8bd69c;
+    --button: #303b32;
+    --operator: #355b40;
+    --special: #604b36;
+    --equals: #71b77d;
+    --equals-text: #101810;
+    --cursor: #26352a;
+    --shadow: #0008;
+}
+
+body[data-theme="dark"] {
+    --bg: #171717;
+    --card: #252525;
+    --display: #111111;
+    --text: #ffffff;
+    --heading: #bbbbbb;
+    --button: #393939;
+    --operator: #505050;
+    --special: #606060;
+    --equals: #aaaaaa;
+    --equals-text: #111111;
+    --cursor: #333333;
+}
+
+body[data-theme="light"] {
+    --bg: #eeeeee;
+    --card: #ffffff;
+    --display: #e9e9e9;
+    --text: #222222;
+    --heading: #333333;
+    --button: #dddddd;
+    --operator: #b8c9dc;
+    --special: #e6cba9;
+    --equals: #82b6e8;
+    --equals-text: #102030;
+    --cursor: #c9d5df;
+    --shadow: #0002;
+}
+
+body[data-theme="matrix"] {
+    --bg: #020b06;
+    --card: #071b10;
+    --display: #000b04;
+    --text: #b5ffc9;
+    --heading: #00ff66;
+    --button: #103d23;
+    --operator: #087b36;
+    --special: #235a38;
+    --equals: #00e65c;
+    --equals-text: #001b09;
+    --cursor: #10351e;
+}
+
+body[data-theme="ocean"] {
+    --bg: #091727;
+    --card: #142c45;
+    --display: #081a2c;
+    --text: #ffffff;
+    --heading: #78caff;
+    --button: #254969;
+    --operator: #236b9e;
+    --special: #536a83;
+    --equals: #42a9e8;
+    --equals-text: #071b2c;
+    --cursor: #1b3c58;
+}
+
+body[data-theme="sunset"] {
+    --bg: #24131a;
+    --card: #3c2029;
+    --display: #25141a;
+    --text: #fff0e8;
+    --heading: #ffb58e;
+    --button: #633641;
+    --operator: #a34d4b;
+    --special: #875438;
+    --equals: #ff956d;
+    --equals-text: #35150e;
+    --cursor: #512b36;
+}
+
+body[data-theme="amoled"] {
+    --bg: #000000;
+    --card: #101010;
+    --display: #000000;
+    --text: #ffffff;
+    --heading: #c4c4c4;
+    --button: #202020;
+    --operator: #363636;
+    --special: #494949;
+    --equals: #ffffff;
+    --equals-text: #000000;
+    --cursor: #202020;
+    --shadow: #000000;
+}
+
 body {
     margin: 0;
     min-height: 100vh;
-    background: #101410;
-    color: white;
+    background: var(--bg);
+    color: var(--text);
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 18px;
+    transition: background .2s, color .2s;
 }
 
 .app {
@@ -28,21 +130,43 @@ body {
     max-width: 440px;
 }
 
-.calculator, .scientific {
-    background: #1c241e;
+.calculator, .scientific, .settings {
+    background: var(--card);
     padding: 18px;
     border-radius: 23px;
-    box-shadow: 0 10px 40px #0008;
+    box-shadow: 0 10px 40px var(--shadow);
+    margin-bottom: 15px;
+    transition: background .2s;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
     margin-bottom: 15px;
 }
 
 h2, h3 {
     text-align: center;
-    color: #8bd69c;
+    color: var(--heading);
+    margin: 8px 0;
+}
+
+.topbar h2 {
+    flex: 1;
+}
+
+.settings-open {
+    min-height: 43px;
+    width: 48px;
+    font-size: 23px;
+    background: var(--operator);
+    flex-shrink: 0;
 }
 
 .display {
-    background: #0d120e;
+    background: var(--display);
     border-radius: 15px;
     padding: 18px;
     min-height: 85px;
@@ -55,11 +179,11 @@ h2, h3 {
     background: transparent;
     border: none;
     outline: none;
-    color: white;
+    color: var(--text);
     font-size: 32px;
     text-align: right;
     font-family: Arial, sans-serif;
-    caret-color: #8bd69c;
+    caret-color: var(--heading);
     user-select: none;
     white-space: nowrap;
 }
@@ -75,29 +199,29 @@ button {
     border-radius: 13px;
     min-height: 57px;
     font-size: 21px;
-    background: #303b32;
-    color: white;
+    background: var(--button);
+    color: var(--text);
     cursor: pointer;
-    transition: 0.12s;
+    transition: .12s;
     touch-action: manipulation;
 }
 
 button:active {
-    transform: scale(0.94);
-    background: #526b57;
+    transform: scale(.94);
+    filter: brightness(1.2);
 }
 
 .operator {
-    background: #355b40;
+    background: var(--operator);
 }
 
 .special {
-    background: #604b36;
+    background: var(--special);
 }
 
 .equals {
-    background: #71b77d;
-    color: #101810;
+    background: var(--equals);
+    color: var(--equals-text);
 }
 
 .zero {
@@ -105,18 +229,18 @@ button:active {
 }
 
 .scientific button {
-    background: #355b40;
+    background: var(--operator);
     font-size: 18px;
     min-height: 52px;
 }
 
 .scientific .special {
-    background: #604b36;
+    background: var(--special);
 }
 
 .scientific .power {
-    background: #568b60;
-    color: white;
+    background: var(--equals);
+    color: var(--equals-text);
     font-weight: bold;
 }
 
@@ -130,7 +254,111 @@ button:active {
     flex: 1;
     min-height: 42px;
     font-size: 17px;
-    background: #26352a;
+    background: var(--cursor);
+}
+
+/* НАСТРОЙКИ */
+
+.settings {
+    display: none;
+}
+
+.settings.active {
+    display: block;
+}
+
+.settings-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.settings-title h2 {
+    margin: 0;
+}
+
+.back-button {
+    min-height: 42px;
+    padding: 0 15px;
+    background: var(--operator);
+    font-size: 16px;
+}
+
+.settings-description {
+    color: var(--text);
+    opacity: .7;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.theme-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.theme-option {
+    min-height: 105px;
+    border: 2px solid transparent;
+    padding: 12px;
+    border-radius: 15px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 16px;
+}
+
+.theme-option.selected {
+    border: 2px solid var(--heading);
+}
+
+.theme-option .preview {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.theme-option .theme-name {
+    font-size: 15px;
+}
+
+.theme-option[data-choice="matrix"] {
+    background: #071b10;
+    color: #00ff66;
+}
+
+.theme-option[data-choice="dark"] {
+    background: #252525;
+    color: white;
+}
+
+.theme-option[data-choice="light"] {
+    background: #eeeeee;
+    color: #222222;
+}
+
+.theme-option[data-choice="ocean"] {
+    background: #142c45;
+    color: #78caff;
+}
+
+.theme-option[data-choice="sunset"] {
+    background: #3c2029;
+    color: #ffb58e;
+}
+
+.theme-option[data-choice="amoled"] {
+    background: #000000;
+    color: white;
+}
+
+.reset-theme {
+    width: 100%;
+    margin-top: 18px;
+    min-height: 48px;
+    background: var(--special);
+    font-size: 16px;
 }
 
 @media (min-width: 700px) {
@@ -138,7 +366,7 @@ button:active {
         max-width: 650px;
     }
 
-    .calculator, .scientific {
+    .calculator, .scientific, .settings {
         padding: 25px;
     }
 
@@ -159,13 +387,18 @@ button:active {
 </style>
 </head>
 
-<body>
+<body data-theme="matrix">
 
 <div class="app">
 
-<div class="calculator">
+<!-- КАЛЬКУЛЯТОР -->
 
-<h2>КАЛЬКУЛЯТОР</h2>
+<div class="calculator" id="calculator">
+
+<div class="topbar">
+    <h2>КАЛЬКУЛЯТОР</h2>
+    <button class="settings-open" onclick="openSettings()">⚙️</button>
+</div>
 
 <div class="display">
     <input
@@ -214,7 +447,9 @@ button:active {
 </div>
 </div>
 
-<div class="scientific">
+<!-- НАУЧНЫЕ ФУНКЦИИ -->
+
+<div class="scientific" id="scientific">
 
 <h3>НАУЧНЫЕ ФУНКЦИИ</h3>
 
@@ -243,6 +478,62 @@ button:active {
 </div>
 </div>
 
+<!-- ОКНО НАСТРОЕК -->
+
+<div class="settings" id="settings">
+
+<div class="settings-title">
+    <h2>НАСТРОЙКИ</h2>
+    <button class="back-button" onclick="closeSettings()">← Назад</button>
+</div>
+
+<h3>Оформление</h3>
+
+<p class="settings-description">
+Выбери тему для своего калькулятора.
+Изменения применяются сразу.
+</p>
+
+<div class="theme-list">
+
+<button class="theme-option" data-choice="matrix" onclick="setTheme('matrix')">
+    <span class="preview">123 + 456</span>
+    <span class="theme-name">🟢 Matrix</span>
+</button>
+
+<button class="theme-option" data-choice="dark" onclick="setTheme('dark')">
+    <span class="preview">123 + 456</span>
+    <span class="theme-name">⚫ Dark</span>
+</button>
+
+<button class="theme-option" data-choice="light" onclick="setTheme('light')">
+    <span class="preview">123 + 456</span>
+    <span class="theme-name">⚪ Light</span>
+</button>
+
+<button class="theme-option" data-choice="ocean" onclick="setTheme('ocean')">
+    <span class="preview">123 + 456</span>
+    <span class="theme-name">🔵 Ocean</span>
+</button>
+
+<button class="theme-option" data-choice="sunset" onclick="setTheme('sunset')">
+    <span class="preview">123 + 456</span>
+    <span class="theme-name">🟠 Sunset</span>
+</button>
+
+<button class="theme-option" data-choice="amoled" onclick="setTheme('amoled')">
+    <span class="preview">123 + 456</span>
+    <span class="theme-name">⚫ AMOLED</span>
+</button>
+
+</div>
+
+<button class="reset-theme" onclick="setTheme('matrix')">
+    Вернуть стандартную тему
+</button>
+
+</div>
+
 </div>
 
 <script>
@@ -252,6 +543,62 @@ const input = document.getElementById("current");
 let expression = "";
 let cursor = 0;
 let resetNext = false;
+
+/* ТЕМЫ */
+
+function setTheme(theme) {
+
+    const allowed = [
+        "matrix",
+        "dark",
+        "light",
+        "ocean",
+        "sunset",
+        "amoled"
+    ];
+
+    if (!allowed.includes(theme)) return;
+
+    document.body.dataset.theme = theme;
+
+    try {
+        localStorage.setItem("calculatorTheme", theme);
+    } catch (e) {}
+
+    document.querySelectorAll(".theme-option").forEach(button => {
+        button.classList.toggle(
+            "selected",
+            button.dataset.choice === theme
+        );
+    });
+}
+
+function loadTheme() {
+
+    let saved = "matrix";
+
+    try {
+        saved = localStorage.getItem("calculatorTheme") || "matrix";
+    } catch (e) {}
+
+    setTheme(saved);
+}
+
+/* ОКНО НАСТРОЕК */
+
+function openSettings() {
+    document.getElementById("calculator").style.display = "none";
+    document.getElementById("scientific").style.display = "none";
+    document.getElementById("settings").classList.add("active");
+}
+
+function closeSettings() {
+    document.getElementById("settings").classList.remove("active");
+    document.getElementById("calculator").style.display = "";
+    document.getElementById("scientific").style.display = "";
+}
+
+/* КАЛЬКУЛЯТОР */
 
 function sync() {
     expression = input.value;
@@ -436,6 +783,8 @@ function factorial() {
     replaceLastNumber(result);
 }
 
+/* ВЫЧИСЛЕНИЯ */
+
 function evaluate(source) {
 
     source = source.replace(/\s/g, "");
@@ -580,10 +929,12 @@ function calculate() {
     }
 }
 
+/* ЗАПУСК */
+
+loadTheme();
 update();
 
 </script>
 
 </body>
-    </html>
-    
+</html>
