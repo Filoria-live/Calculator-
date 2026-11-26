@@ -7,382 +7,422 @@
 <title>Калькулятор</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 :root {
-    --bg: #101410;
-    --card: #1c241e;
-    --display: #0d120e;
-    --text: #ffffff;
-    --heading: #8bd69c;
-    --button: #303b32;
-    --operator: #355b40;
-    --special: #604b36;
-    --equals: #71b77d;
-    --equals-text: #101810;
-    --cursor: #26352a;
-    --shadow: #0008;
+    --bg:#101410;
+    --card:#1c241e;
+    --display:#0d120e;
+    --text:#fff;
+    --heading:#8bd69c;
+    --button:#303b32;
+    --operator:#355b40;
+    --special:#604b36;
+    --equals:#71b77d;
+    --equals-text:#101810;
+    --cursor:#26352a;
+    --shadow:#0008;
 }
 
 body[data-theme="dark"] {
-    --bg: #171717;
-    --card: #252525;
-    --display: #111111;
-    --text: #ffffff;
-    --heading: #bbbbbb;
-    --button: #393939;
-    --operator: #505050;
-    --special: #606060;
-    --equals: #aaaaaa;
-    --equals-text: #111111;
-    --cursor: #333333;
+    --bg:#171717; --card:#252525; --display:#111;
+    --text:#fff; --heading:#bbb; --button:#393939;
+    --operator:#505050; --special:#606060;
+    --equals:#aaa; --equals-text:#111; --cursor:#333;
 }
 
 body[data-theme="light"] {
-    --bg: #eeeeee;
-    --card: #ffffff;
-    --display: #e9e9e9;
-    --text: #222222;
-    --heading: #333333;
-    --button: #dddddd;
-    --operator: #b8c9dc;
-    --special: #e6cba9;
-    --equals: #82b6e8;
-    --equals-text: #102030;
-    --cursor: #c9d5df;
-    --shadow: #0002;
+    --bg:#eee; --card:#fff; --display:#e9e9e9;
+    --text:#222; --heading:#333; --button:#ddd;
+    --operator:#b8c9dc; --special:#e6cba9;
+    --equals:#82b6e8; --equals-text:#102030;
+    --cursor:#c9d5df; --shadow:#0002;
 }
 
 body[data-theme="matrix"] {
-    --bg: #020b06;
-    --card: #071b10;
-    --display: #000b04;
-    --text: #b5ffc9;
-    --heading: #00ff66;
-    --button: #103d23;
-    --operator: #087b36;
-    --special: #235a38;
-    --equals: #00e65c;
-    --equals-text: #001b09;
-    --cursor: #10351e;
+    --bg:#020b06; --card:#071b10; --display:#000b04;
+    --text:#b5ffc9; --heading:#00ff66; --button:#103d23;
+    --operator:#087b36; --special:#235a38;
+    --equals:#00e65c; --equals-text:#001b09;
+    --cursor:#10351e;
 }
 
 body[data-theme="ocean"] {
-    --bg: #091727;
-    --card: #142c45;
-    --display: #081a2c;
-    --text: #ffffff;
-    --heading: #78caff;
-    --button: #254969;
-    --operator: #236b9e;
-    --special: #536a83;
-    --equals: #42a9e8;
-    --equals-text: #071b2c;
-    --cursor: #1b3c58;
+    --bg:#091727; --card:#142c45; --display:#081a2c;
+    --text:#fff; --heading:#78caff; --button:#254969;
+    --operator:#236b9e; --special:#536a83;
+    --equals:#42a9e8; --equals-text:#071b2c;
+    --cursor:#1b3c58;
 }
 
 body[data-theme="sunset"] {
-    --bg: #24131a;
-    --card: #3c2029;
-    --display: #25141a;
-    --text: #fff0e8;
-    --heading: #ffb58e;
-    --button: #633641;
-    --operator: #a34d4b;
-    --special: #875438;
-    --equals: #ff956d;
-    --equals-text: #35150e;
-    --cursor: #512b36;
+    --bg:#24131a; --card:#3c2029; --display:#25141a;
+    --text:#fff0e8; --heading:#ffb58e; --button:#633641;
+    --operator:#a34d4b; --special:#875438;
+    --equals:#ff956d; --equals-text:#35150e;
+    --cursor:#512b36;
 }
 
 body[data-theme="amoled"] {
-    --bg: #000000;
-    --card: #101010;
-    --display: #000000;
-    --text: #ffffff;
-    --heading: #c4c4c4;
-    --button: #202020;
-    --operator: #363636;
-    --special: #494949;
-    --equals: #ffffff;
-    --equals-text: #000000;
-    --cursor: #202020;
-    --shadow: #000000;
+    --bg:#000; --card:#101010; --display:#000;
+    --text:#fff; --heading:#c4c4c4; --button:#202020;
+    --operator:#363636; --special:#494949;
+    --equals:#fff; --equals-text:#000;
+    --cursor:#202020; --shadow:#000;
 }
 
 body {
-    margin: 0;
-    min-height: 100vh;
-    background: var(--bg);
-    color: var(--text);
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 18px;
-    transition: background .2s, color .2s;
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:18px;
+    transition:.2s;
 }
 
-.app {
-    width: 100%;
-    max-width: 440px;
-}
+.app { width:100%; max-width:650px; }
 
-.calculator, .scientific, .settings {
-    background: var(--card);
-    padding: 18px;
-    border-radius: 23px;
-    box-shadow: 0 10px 40px var(--shadow);
-    margin-bottom: 15px;
-    transition: background .2s;
+.calculator,.scientific,.settings,.graph-panel {
+    background:var(--card);
+    padding:18px;
+    border-radius:23px;
+    box-shadow:0 10px 40px var(--shadow);
+    margin-bottom:15px;
 }
 
 .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 15px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:15px;
 }
 
-h2, h3 {
-    text-align: center;
-    color: var(--heading);
-    margin: 8px 0;
+h2,h3 {
+    text-align:center;
+    color:var(--heading);
+    margin:8px 0;
 }
 
-.topbar h2 {
-    flex: 1;
-}
-
-.settings-open {
-    min-height: 43px;
-    width: 48px;
-    font-size: 23px;
-    background: var(--operator);
-    flex-shrink: 0;
-}
-
-.display {
-    background: var(--display);
-    border-radius: 15px;
-    padding: 18px;
-    min-height: 85px;
-    margin-bottom: 15px;
-    overflow-x: auto;
-}
-
-#current {
-    width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--text);
-    font-size: 32px;
-    text-align: right;
-    font-family: Arial, sans-serif;
-    caret-color: var(--heading);
-    user-select: none;
-    white-space: nowrap;
-}
-
-.buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 9px;
-}
+.topbar h2 { flex:1; }
 
 button {
-    border: none;
-    border-radius: 13px;
-    min-height: 57px;
-    font-size: 21px;
-    background: var(--button);
-    color: var(--text);
-    cursor: pointer;
-    transition: .12s;
-    touch-action: manipulation;
+    border:none;
+    border-radius:13px;
+    min-height:52px;
+    padding:8px;
+    font-size:19px;
+    background:var(--button);
+    color:var(--text);
+    cursor:pointer;
+    touch-action:manipulation;
 }
 
 button:active {
-    transform: scale(.94);
-    filter: brightness(1.2);
+    transform:scale(.95);
+    filter:brightness(1.2);
 }
 
-.operator {
-    background: var(--operator);
+.operator { background:var(--operator); }
+.special { background:var(--special); }
+.equals { background:var(--equals); color:var(--equals-text); }
+.power { background:var(--equals); color:var(--equals-text); }
+
+.settings-open {
+    width:46px;
+    min-height:43px;
+    font-size:23px;
+    background:var(--operator);
 }
 
-.special {
-    background: var(--special);
+.graph-open {
+    min-height:43px;
+    background:var(--operator);
+    font-size:19px;
 }
 
-.equals {
-    background: var(--equals);
-    color: var(--equals-text);
+.display {
+    background:var(--display);
+    border-radius:15px;
+    padding:18px;
+    min-height:85px;
+    margin-bottom:15px;
+    overflow-x:auto;
 }
 
-.zero {
-    grid-column: span 2;
+#current {
+    width:100%;
+    background:transparent;
+    border:none;
+    outline:none;
+    color:var(--text);
+    font-size:32px;
+    text-align:right;
+    font-family:Arial,sans-serif;
+    caret-color:var(--heading);
+    user-select:none;
+    white-space:nowrap;
 }
+
+.buttons {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:9px;
+}
+
+.zero { grid-column:span 2; }
 
 .scientific button {
-    background: var(--operator);
-    font-size: 18px;
-    min-height: 52px;
+    background:var(--operator);
+    font-size:18px;
+    min-height:52px;
 }
 
-.scientific .special {
-    background: var(--special);
-}
-
+.scientific .special { background:var(--special); }
 .scientific .power {
-    background: var(--equals);
-    color: var(--equals-text);
-    font-weight: bold;
+    background:var(--equals);
+    color:var(--equals-text);
+    font-weight:bold;
 }
 
 .cursor-controls {
-    display: flex;
-    gap: 10px;
-    margin-top: 12px;
+    display:flex;
+    gap:10px;
+    margin-top:12px;
 }
 
 .cursor-controls button {
-    flex: 1;
-    min-height: 42px;
-    font-size: 17px;
-    background: var(--cursor);
+    flex:1;
+    min-height:42px;
+    font-size:17px;
+    background:var(--cursor);
 }
 
-/* НАСТРОЙКИ */
+/* SETTINGS */
 
-.settings {
-    display: none;
-}
-
-.settings.active {
-    display: block;
-}
+.settings { display:none; }
+.settings.active { display:block; }
 
 .settings-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
 }
 
-.settings-title h2 {
-    margin: 0;
-}
+.settings-title h2 { margin:0; }
 
 .back-button {
-    min-height: 42px;
-    padding: 0 15px;
-    background: var(--operator);
-    font-size: 16px;
+    min-height:42px;
+    padding:0 15px;
+    background:var(--operator);
+    font-size:16px;
 }
 
 .settings-description {
-    color: var(--text);
-    opacity: .7;
-    font-size: 14px;
-    margin-bottom: 15px;
+    opacity:.7;
+    font-size:14px;
+    margin-bottom:15px;
 }
 
 .theme-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
 }
 
 .theme-option {
-    min-height: 105px;
-    border: 2px solid transparent;
-    padding: 12px;
-    border-radius: 15px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    font-size: 16px;
+    min-height:105px;
+    border:2px solid transparent;
+    padding:12px;
+    border-radius:15px;
+    text-align:left;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    font-size:16px;
 }
 
 .theme-option.selected {
-    border: 2px solid var(--heading);
+    border:2px solid var(--heading);
 }
 
 .theme-option .preview {
-    font-size: 22px;
-    font-weight: bold;
-}
-
-.theme-option .theme-name {
-    font-size: 15px;
+    font-size:22px;
+    font-weight:bold;
 }
 
 .theme-option[data-choice="matrix"] {
-    background: #071b10;
-    color: #00ff66;
+    background:#071b10;color:#00ff66;
 }
-
 .theme-option[data-choice="dark"] {
-    background: #252525;
-    color: white;
+    background:#252525;color:white;
 }
-
 .theme-option[data-choice="light"] {
-    background: #eeeeee;
-    color: #222222;
+    background:#eee;color:#222;
 }
-
 .theme-option[data-choice="ocean"] {
-    background: #142c45;
-    color: #78caff;
+    background:#142c45;color:#78caff;
 }
-
 .theme-option[data-choice="sunset"] {
-    background: #3c2029;
-    color: #ffb58e;
+    background:#3c2029;color:#ffb58e;
 }
-
 .theme-option[data-choice="amoled"] {
-    background: #000000;
-    color: white;
+    background:#000;color:white;
 }
 
 .reset-theme {
-    width: 100%;
-    margin-top: 18px;
-    min-height: 48px;
-    background: var(--special);
-    font-size: 16px;
+    width:100%;
+    margin-top:18px;
+    min-height:48px;
+    background:var(--special);
+    font-size:16px;
 }
 
-@media (min-width: 700px) {
-    .app {
-        max-width: 650px;
-    }
+/* ГРАФИКИ */
 
-    .calculator, .scientific, .settings {
-        padding: 25px;
+.graph-panel { display:none; }
+.graph-panel.active { display:block; }
+
+.graph-title {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:15px;
+}
+
+.graph-title h2 { margin:0; }
+
+.graph-input {
+    width:100%;
+    min-height:53px;
+    background:var(--display);
+    color:var(--text);
+    border:1px solid var(--operator);
+    border-radius:12px;
+    padding:12px;
+    font-size:20px;
+    outline:none;
+    margin:8px 0;
+}
+
+.graph-input:focus {
+    border-color:var(--heading);
+}
+
+.graph-hint {
+    font-size:13px;
+    opacity:.7;
+    line-height:1.5;
+}
+
+.graph-actions {
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+    margin:10px 0;
+}
+
+.graph-actions button {
+    background:var(--operator);
+    min-height:47px;
+    font-size:16px;
+}
+
+.graph-actions .clear-graphs {
+    background:var(--special);
+}
+
+.graph-canvas-wrap {
+    width:100%;
+    background:var(--display);
+    border-radius:15px;
+    overflow:hidden;
+    margin-top:12px;
+}
+
+#graphCanvas {
+    display:block;
+    width:100%;
+    height:340px;
+    touch-action:pan-y;
+}
+
+.graph-status {
+    font-size:14px;
+    opacity:.8;
+    margin:12px 0;
+    min-height:20px;
+}
+
+.graph-list {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top:12px;
+}
+
+.graph-item {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    background:var(--display);
+    padding:9px 12px;
+    border-radius:10px;
+    font-size:15px;
+}
+
+.graph-item button {
+    min-height:35px;
+    width:38px;
+    background:var(--special);
+    font-size:17px;
+}
+
+.graph-color {
+    display:inline-block;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    margin-right:7px;
+}
+
+.graph-scale {
+    display:flex;
+    gap:9px;
+    margin-top:10px;
+}
+
+.graph-scale button {
+    flex:1;
+    background:var(--cursor);
+}
+
+@media(min-width:700px) {
+    .app { max-width:650px; }
+
+    .calculator,.scientific,.settings,.graph-panel {
+        padding:25px;
     }
 
     button {
-        min-height: 75px;
-        font-size: 26px;
+        min-height:65px;
+        font-size:23px;
     }
 
     .scientific button {
-        min-height: 65px;
-        font-size: 22px;
+        min-height:60px;
+        font-size:21px;
     }
 
-    #current {
-        font-size: 42px;
-    }
+    #current { font-size:42px; }
+    #graphCanvas { height:420px; }
 }
 </style>
 </head>
@@ -397,20 +437,18 @@ button:active {
 
 <div class="topbar">
     <h2>КАЛЬКУЛЯТОР</h2>
+    <button class="graph-open" onclick="openGraph()">📈</button>
     <button class="settings-open" onclick="openSettings()">⚙️</button>
 </div>
 
 <div class="display">
-    <input
-        id="current"
-        type="text"
+    <input id="current" type="text"
         value=""
         placeholder="0"
         autocomplete="off"
         spellcheck="false"
         inputmode="none"
-        readonly
-    >
+        readonly>
 </div>
 
 <div class="cursor-controls">
@@ -478,7 +516,54 @@ button:active {
 </div>
 </div>
 
-<!-- ОКНО НАСТРОЕК -->
+<!-- ГРАФИКИ -->
+
+<div class="graph-panel" id="graphPanel">
+
+<div class="graph-title">
+    <h2>📈 ГРАФИКИ</h2>
+    <button class="back-button" onclick="closeGraph()">← Назад</button>
+</div>
+
+<p class="graph-hint">
+Введи функцию от x. Например: x^2, 2*x+5, sin(x), cos(x).
+Можно добавлять несколько функций.
+</p>
+
+<input
+    id="graphExpression"
+    class="graph-input"
+    type="text"
+    placeholder="Например: x^2"
+    autocomplete="off"
+    spellcheck="false"
+>
+
+<div class="graph-actions">
+    <button onclick="addGraph()">＋ Построить</button>
+    <button class="clear-graphs" onclick="clearGraphs()">Очистить</button>
+</div>
+
+<div class="graph-canvas-wrap">
+    <canvas id="graphCanvas"></canvas>
+</div>
+
+<div class="graph-scale">
+    <button onclick="zoomGraph(1.5)">＋ Приблизить</button>
+    <button onclick="zoomGraph(1/1.5)">－ Отдалить</button>
+    <button onclick="resetGraph()">Сброс</button>
+</div>
+
+<p class="graph-status" id="graphStatus">
+    Введи функцию и нажми «Построить».
+</p>
+
+<h3>МОИ ГРАФИКИ</h3>
+<div class="graph-list" id="graphList"></div>
+
+</div>
+
+<!-- НАСТРОЙКИ -->
 
 <div class="settings" id="settings">
 
@@ -498,32 +583,32 @@ button:active {
 
 <button class="theme-option" data-choice="matrix" onclick="setTheme('matrix')">
     <span class="preview">123 + 456</span>
-    <span class="theme-name">🟢 Matrix</span>
+    <span>🟢 Matrix</span>
 </button>
 
 <button class="theme-option" data-choice="dark" onclick="setTheme('dark')">
     <span class="preview">123 + 456</span>
-    <span class="theme-name">⚫ Dark</span>
+    <span>⚫ Dark</span>
 </button>
 
 <button class="theme-option" data-choice="light" onclick="setTheme('light')">
     <span class="preview">123 + 456</span>
-    <span class="theme-name">⚪ Light</span>
+    <span>⚪ Light</span>
 </button>
 
 <button class="theme-option" data-choice="ocean" onclick="setTheme('ocean')">
     <span class="preview">123 + 456</span>
-    <span class="theme-name">🔵 Ocean</span>
+    <span>🔵 Ocean</span>
 </button>
 
 <button class="theme-option" data-choice="sunset" onclick="setTheme('sunset')">
     <span class="preview">123 + 456</span>
-    <span class="theme-name">🟠 Sunset</span>
+    <span>🟠 Sunset</span>
 </button>
 
 <button class="theme-option" data-choice="amoled" onclick="setTheme('amoled')">
     <span class="preview">123 + 456</span>
-    <span class="theme-name">⚫ AMOLED</span>
+    <span>⚫ AMOLED</span>
 </button>
 
 </div>
@@ -549,12 +634,8 @@ let resetNext = false;
 function setTheme(theme) {
 
     const allowed = [
-        "matrix",
-        "dark",
-        "light",
-        "ocean",
-        "sunset",
-        "amoled"
+        "matrix","dark","light",
+        "ocean","sunset","amoled"
     ];
 
     if (!allowed.includes(theme)) return;
@@ -562,8 +643,8 @@ function setTheme(theme) {
     document.body.dataset.theme = theme;
 
     try {
-        localStorage.setItem("calculatorTheme", theme);
-    } catch (e) {}
+        localStorage.setItem("calculatorTheme",theme);
+    } catch(e) {}
 
     document.querySelectorAll(".theme-option").forEach(button => {
         button.classList.toggle(
@@ -571,31 +652,52 @@ function setTheme(theme) {
             button.dataset.choice === theme
         );
     });
+
+    if (graphs.length) drawGraphs();
 }
 
 function loadTheme() {
-
     let saved = "matrix";
 
     try {
         saved = localStorage.getItem("calculatorTheme") || "matrix";
-    } catch (e) {}
+    } catch(e) {}
 
     setTheme(saved);
 }
 
-/* ОКНО НАСТРОЕК */
+/* ОКНА */
 
 function openSettings() {
-    document.getElementById("calculator").style.display = "none";
-    document.getElementById("scientific").style.display = "none";
+    document.getElementById("calculator").style.display="none";
+    document.getElementById("scientific").style.display="none";
+    document.getElementById("graphPanel").style.display="none";
     document.getElementById("settings").classList.add("active");
 }
 
 function closeSettings() {
     document.getElementById("settings").classList.remove("active");
-    document.getElementById("calculator").style.display = "";
-    document.getElementById("scientific").style.display = "";
+    document.getElementById("calculator").style.display="";
+    document.getElementById("scientific").style.display="";
+}
+
+function openGraph() {
+    document.getElementById("calculator").style.display="none";
+    document.getElementById("scientific").style.display="none";
+    document.getElementById("settings").classList.remove("active");
+
+    const panel = document.getElementById("graphPanel");
+    panel.style.display="block";
+    panel.classList.add("active");
+
+    drawGraphs();
+}
+
+function closeGraph() {
+    document.getElementById("graphPanel").style.display="none";
+    document.getElementById("graphPanel").classList.remove("active");
+    document.getElementById("calculator").style.display="";
+    document.getElementById("scientific").style.display="";
 }
 
 /* КАЛЬКУЛЯТОР */
@@ -605,58 +707,54 @@ function sync() {
 }
 
 function update() {
-    input.value = expression;
-    cursor = Math.min(cursor, expression.length);
+    input.value=expression;
+    cursor=Math.min(cursor,expression.length);
 }
 
 function insert(value) {
-
     sync();
 
-    if (resetNext) {
-        expression = "";
-        cursor = 0;
-        resetNext = false;
+    if(resetNext) {
+        expression="";
+        cursor=0;
+        resetNext=false;
     }
 
-    expression =
-        expression.slice(0, cursor) +
-        value +
+    expression=
+        expression.slice(0,cursor)+
+        value+
         expression.slice(cursor);
 
-    cursor += value.length;
-
+    cursor+=value.length;
     update();
 }
 
 function moveCursor(direction) {
-    cursor = Math.max(
+    cursor=Math.max(
         0,
-        Math.min(expression.length, cursor + direction)
+        Math.min(expression.length,cursor+direction)
     );
 }
 
 function clearAll() {
-    expression = "";
-    cursor = 0;
-    resetNext = false;
+    expression="";
+    cursor=0;
+    resetNext=false;
     update();
 }
 
 function backspace() {
-
     sync();
 
-    if (resetNext) {
+    if(resetNext) {
         clearAll();
         return;
     }
 
-    if (cursor > 0) {
-        expression =
-            expression.slice(0, cursor - 1) +
+    if(cursor>0) {
+        expression=
+            expression.slice(0,cursor-1)+
             expression.slice(cursor);
-
         cursor--;
     }
 
@@ -664,165 +762,137 @@ function backspace() {
 }
 
 function getLastNumber() {
+    const before=expression.slice(0,cursor);
 
-    const before = expression.slice(0, cursor);
-
-    const match = before.match(
+    const match=before.match(
         /(?:\d+(?:\.\d*)?|\.\d+)$/
     );
 
-    if (!match) return null;
+    if(!match) return null;
 
     return {
-        value: Number(match[0]),
-        start: cursor - match[0].length,
-        end: cursor
+        value:Number(match[0]),
+        start:cursor-match[0].length,
+        end:cursor
     };
 }
 
 function replaceLastNumber(value) {
+    const item=getLastNumber();
+    if(!item) return;
 
-    const item = getLastNumber();
-
-    if (!item) return;
-
-    expression =
-        expression.slice(0, item.start) +
-        String(value) +
+    expression=
+        expression.slice(0,item.start)+
+        String(value)+
         expression.slice(item.end);
 
-    cursor = item.start + String(value).length;
-
+    cursor=item.start+String(value).length;
     update();
 }
 
 function percent() {
-    const item = getLastNumber();
-    if (!item) return;
-    replaceLastNumber(item.value / 100);
+    const item=getLastNumber();
+    if(!item) return;
+    replaceLastNumber(item.value/100);
 }
 
 function toggleSign() {
-
-    const item = getLastNumber();
-
-    if (!item) return;
-
+    const item=getLastNumber();
+    if(!item) return;
     replaceLastNumber(-item.value);
 }
 
 function squareRoot() {
-
-    const item = getLastNumber();
-
-    if (!item || item.value < 0) return;
-
+    const item=getLastNumber();
+    if(!item || item.value<0) return;
     replaceLastNumber(Math.sqrt(item.value));
 }
 
 function trig(type) {
+    const item=getLastNumber();
+    if(!item) return;
 
-    const item = getLastNumber();
-
-    if (!item) return;
-
-    const radians = item.value * Math.PI / 180;
-
+    const radians=item.value*Math.PI/180;
     let result;
 
-    if (type === "sin") result = Math.sin(radians);
-    if (type === "cos") result = Math.cos(radians);
-    if (type === "tan") result = Math.tan(radians);
+    if(type==="sin") result=Math.sin(radians);
+    if(type==="cos") result=Math.cos(radians);
+    if(type==="tan") result=Math.tan(radians);
 
-    if (!Number.isFinite(result)) return;
+    if(!Number.isFinite(result)) return;
 
     replaceLastNumber(Number(result.toPrecision(12)));
 }
 
 function logarithm() {
-
-    const item = getLastNumber();
-
-    if (!item || item.value <= 0) return;
-
+    const item=getLastNumber();
+    if(!item || item.value<=0) return;
     replaceLastNumber(Math.log10(item.value));
 }
 
 function naturalLog() {
-
-    const item = getLastNumber();
-
-    if (!item || item.value <= 0) return;
-
+    const item=getLastNumber();
+    if(!item || item.value<=0) return;
     replaceLastNumber(Math.log(item.value));
 }
 
 function fraction() {
-
-    const item = getLastNumber();
-
-    if (!item) return;
-
+    const item=getLastNumber();
+    if(!item) return;
     insert("/");
 }
 
 function factorial() {
+    const item=getLastNumber();
 
-    const item = getLastNumber();
+    if(!item || item.value<0 ||
+       !Number.isInteger(item.value) ||
+       item.value>170) return;
 
-    if (!item || item.value < 0 ||
-        !Number.isInteger(item.value) ||
-        item.value > 170) return;
+    let result=1;
 
-    let result = 1;
-
-    for (let i = 2; i <= item.value; i++) {
-        result *= i;
+    for(let i=2;i<=item.value;i++) {
+        result*=i;
     }
 
     replaceLastNumber(result);
 }
 
-/* ВЫЧИСЛЕНИЯ */
+/* ВЫЧИСЛЕНИЕ ОБЫЧНЫХ ПРИМЕРОВ */
 
 function evaluate(source) {
 
-    source = source.replace(/\s/g, "");
+    source=source.replace(/\s/g,"");
 
-    const tokens = source.match(
+    const tokens=source.match(
         /(?:\d+(?:\.\d*)?|\.\d+)|Math\.PI|[()+\-*/^]/g
     );
 
-    if (!tokens || tokens.join("") !== source) {
+    if(!tokens || tokens.join("")!==source) {
         throw new Error("Ошибка выражения");
     }
 
-    let position = 0;
+    let position=0;
 
     function primary() {
+        let token=tokens[position];
 
-        let token = tokens[position];
-
-        if (token === "(") {
+        if(token==="(") {
             position++;
+            let value=add();
 
-            let value = add();
-
-            if (tokens[position] !== ")") {
-                throw new Error();
-            }
+            if(tokens[position]!==")") throw new Error();
 
             position++;
             return value;
         }
 
-        if (token === "Math.PI") {
+        if(token==="Math.PI") {
             position++;
             return Math.PI;
         }
 
-        if (token === undefined ||
-            !Number.isFinite(Number(token))) {
+        if(token===undefined || !Number.isFinite(Number(token))) {
             throw new Error();
         }
 
@@ -831,19 +901,178 @@ function evaluate(source) {
     }
 
     function power() {
+        let value=primary();
 
-        let value = primary();
-
-        if (tokens[position] === "^") {
+        if(tokens[position]==="^") {
             position++;
-            value = Math.pow(value, unary());
+            value=Math.pow(value,unary());
         }
 
         return value;
     }
 
     function unary() {
+        if(tokens[position]==="-") {
+            position++;
+            return -unary();
+        }
 
+        if(tokens[position]==="+") {
+            position++;
+            return unary();
+        }
+
+        return power();
+    }
+
+    function multiply() {
+        let value=unary();
+
+        while(tokens[position]==="*" || tokens[position]==="/") {
+            let op=tokens[position++];
+
+            if(op==="*") value*=unary();
+            else value/=unary();
+        }
+
+        return value;
+    }
+
+    function add() {
+        let value=multiply();
+
+        while(tokens[position]==="+" || tokens[position]==="-") {
+            let op=tokens[position++];
+
+            if(op==="+") value+=multiply();
+            else value-=multiply();
+        }
+
+        return value;
+    }
+
+    let result=add();
+
+    if(position!==tokens.length || !Number.isFinite(result)) {
+        throw new Error();
+    }
+
+    return result;
+}
+
+function calculate() {
+    if(!expression) return;
+
+    try {
+    const result = evaluate(expression);
+
+    expression = String(Number(result.toPrecision(12)));
+    cursor = expression.length;
+    resetNext = true;
+    update();
+
+} catch (error) {
+    expression = "Ошибка";
+    cursor = expression.length;
+    resetNext = true;
+    update();
+}
+}
+    /* ПАРСЕР ФУНКЦИЙ ДЛЯ ГРАФИКОВ */
+
+function evaluateFunction(source, x) {
+    source = source
+        .replace(/\s/g, "")
+        .replace(/π/g, "pi")
+        .replace(/,/g, ".");
+
+    const tokens = source.match(
+        /(?:\d+(?:\.\d*)?|\.\d+)|[a-zA-Z]+|[()+\-*/^]/g
+    );
+
+    if (!tokens || tokens.join("") !== source) {
+        throw new Error("Неверная запись функции");
+    }
+
+    const allowed = [
+        "x", "pi", "sin", "cos", "tan",
+        "sqrt", "log", "ln", "abs"
+    ];
+
+    for (const token of tokens) {
+        if (/^[a-zA-Z]+$/.test(token) && !allowed.includes(token)) {
+            throw new Error("Неизвестная функция: " + token);
+        }
+    }
+
+    let position = 0;
+
+    function primary() {
+        const token = tokens[position];
+
+        if (token === "(") {
+            position++;
+            const value = add();
+
+            if (tokens[position] !== ")") throw new Error();
+
+            position++;
+            return value;
+        }
+
+        if (token === "x") {
+            position++;
+            return x;
+        }
+
+        if (token === "pi") {
+            position++;
+            return Math.PI;
+        }
+
+        if (["sin", "cos", "tan", "sqrt", "log", "ln", "abs"].includes(token)) {
+            position++;
+
+            if (tokens[position] !== "(") throw new Error();
+
+            position++;
+            const value = add();
+
+            if (tokens[position] !== ")") throw new Error();
+
+            position++;
+
+            switch (token) {
+                case "sin": return Math.sin(value);
+                case "cos": return Math.cos(value);
+                case "tan": return Math.tan(value);
+                case "sqrt": return Math.sqrt(value);
+                case "log": return Math.log10(value);
+                case "ln": return Math.log(value);
+                case "abs": return Math.abs(value);
+            }
+        }
+
+        if (token === undefined || !Number.isFinite(Number(token))) {
+            throw new Error();
+        }
+
+        position++;
+        return Number(token);
+    }
+
+    function power() {
+        const value = primary();
+
+        if (tokens[position] === "^") {
+            position++;
+            return Math.pow(value, unary());
+        }
+
+        return value;
+    }
+
+    function unary() {
         if (tokens[position] === "-") {
             position++;
             return -unary();
@@ -858,14 +1087,10 @@ function evaluate(source) {
     }
 
     function multiply() {
-
         let value = unary();
 
-        while (
-            tokens[position] === "*" ||
-            tokens[position] === "/"
-        ) {
-            let op = tokens[position++];
+        while (tokens[position] === "*" || tokens[position] === "/") {
+            const op = tokens[position++];
 
             if (op === "*") value *= unary();
             else value /= unary();
@@ -875,14 +1100,10 @@ function evaluate(source) {
     }
 
     function add() {
-
         let value = multiply();
 
-        while (
-            tokens[position] === "+" ||
-            tokens[position] === "-"
-        ) {
-            let op = tokens[position++];
+        while (tokens[position] === "+" || tokens[position] === "-") {
+            const op = tokens[position++];
 
             if (op === "+") value += multiply();
             else value -= multiply();
@@ -891,50 +1112,243 @@ function evaluate(source) {
         return value;
     }
 
-    let result = add();
+    const result = add();
 
-    if (position !== tokens.length ||
-        !Number.isFinite(result)) {
-        throw new Error();
+    if (position !== tokens.length || !Number.isFinite(result)) {
+        throw new Error("Не удалось вычислить функцию");
     }
 
     return result;
 }
 
-function calculate() {
 
-    if (!expression) return;
+/* СИСТЕМА ГРАФИКОВ */
+
+let graphs = [];
+let graphMin = -10;
+let graphMax = 10;
+
+const graphColors = [
+    "#00ff88",
+    "#ff5555",
+    "#55aaff",
+    "#ffaa00",
+    "#cc66ff"
+];
+
+function addGraph() {
+    const input = document.getElementById("graphInput");
+    const source = input.value.trim();
+
+    if (!source) {
+        setGraphStatus("Введи функцию, например x^2");
+        return;
+    }
 
     try {
+        evaluateFunction(source, 1);
 
-        const result = evaluate(expression);
+        graphs.push({
+            expression: source,
+            color: graphColors[graphs.length % graphColors.length]
+        });
 
-        if (!Number.isFinite(result)) {
-            throw new Error();
-        }
-
-        expression = String(Number(result.toPrecision(12)));
-        cursor = expression.length;
-        resetNext = true;
-
-        update();
-
+        input.value = "";
+        updateGraphList();
+        drawGraphs();
+        setGraphStatus("График построен");
     } catch (error) {
-
-        expression = "Ошибка";
-        cursor = expression.length;
-        resetNext = true;
-
-        update();
+        setGraphStatus("Ошибка в записи функции");
     }
 }
 
-/* ЗАПУСК */
+function clearGraphs() {
+    graphs = [];
+    updateGraphList();
+    drawGraphs();
+    setGraphStatus("Графики очищены");
+}
 
+function removeGraph(index) {
+    graphs.splice(index, 1);
+    updateGraphList();
+    drawGraphs();
+}
+
+function updateGraphList() {
+    const list = document.getElementById("graphList");
+
+    if (!list) return;
+
+    list.innerHTML = "";
+
+    graphs.forEach((graph, index) => {
+        const item = document.createElement("div");
+
+        item.style.display = "flex";
+        item.style.justifyContent = "space-between";
+        item.style.alignItems = "center";
+        item.style.padding = "8px";
+        item.style.marginTop = "5px";
+        item.style.borderRadius = "8px";
+        item.style.background = "rgba(255,255,255,0.08)";
+
+        const name = document.createElement("span");
+        name.textContent = "y = " + graph.expression;
+        name.style.color = graph.color;
+
+        const remove = document.createElement("button");
+        remove.textContent = "×";
+        remove.onclick = () => removeGraph(index);
+
+        item.appendChild(name);
+        item.appendChild(remove);
+        list.appendChild(item);
+    });
+}
+
+function setGraphStatus(message) {
+    const status = document.getElementById("graphStatus");
+
+    if (status) {
+        status.textContent = message;
+    }
+}
+
+function zoomGraph(direction) {
+    const center = (graphMin + graphMax) / 2;
+    const range = (graphMax - graphMin) / 2;
+
+    const newRange = direction > 0
+        ? range * 0.8
+        : range * 1.25;
+
+    graphMin = center - newRange;
+    graphMax = center + newRange;
+
+    drawGraphs();
+}
+
+function resetGraph() {
+    graphMin = -10;
+    graphMax = 10;
+    drawGraphs();
+}
+
+function drawGraphs() {
+    const canvas = document.getElementById("graphCanvas");
+
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+
+    const width = canvas.width;
+    const height = canvas.height;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const range = graphMax - graphMin;
+    const scaleX = width / range;
+    const scaleY = height / range;
+
+    function toCanvasX(x) {
+        return (x - graphMin) * scaleX;
+    }
+
+    function toCanvasY(y) {
+        return height / 2 - y * scaleY;
+    }
+
+    // Сетка
+    ctx.strokeStyle = "rgba(150,150,150,0.2)";
+    ctx.lineWidth = 1;
+
+    for (let i = Math.ceil(graphMin); i <= graphMax; i++) {
+        const x = toCanvasX(i);
+        const y = toCanvasY(i);
+
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+    }
+
+    // Оси
+    ctx.strokeStyle = "#888";
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+    ctx.moveTo(toCanvasX(0), 0);
+    ctx.lineTo(toCanvasX(0), height);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(0, toCanvasY(0));
+    ctx.lineTo(width, toCanvasY(0));
+    ctx.stroke();
+
+    // Графики функций
+    graphs.forEach(graph => {
+        ctx.strokeStyle = graph.color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+
+        let started = false;
+
+        for (let pixel = 0; pixel <= width; pixel++) {
+            const x = graphMin + pixel / scaleX;
+
+            try {
+                const y = evaluateFunction(graph.expression, x);
+                const canvasY = toCanvasY(y);
+
+                if (!Number.isFinite(canvasY) || Math.abs(canvasY) > height * 3) {
+                    started = false;
+                    continue;
+                }
+
+                if (!started) {
+                    ctx.moveTo(pixel, canvasY);
+                    started = true;
+                } else {
+                    ctx.lineTo(pixel, canvasY);
+                }
+            } catch (error) {
+                started = false;
+            }
+        }
+
+        ctx.stroke();
+    });
+}
+
+
+// Обновление графика при изменении размера окна
+window.addEventListener("resize", drawGraphs);
+
+
+// Построение графика по Enter
+const graphInput = document.getElementById("graphInput");
+
+if (graphInput) {
+    graphInput.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+            addGraph();
+        }
+    });
+}
+
+
+// Запуск калькулятора
 loadTheme();
 update();
 
 </script>
-
 </body>
 </html>
+       
