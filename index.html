@@ -9,18 +9,11 @@
 * { box-sizing: border-box; }
 
 :root {
-    --bg:#101410;
-    --card:#1c241e;
-    --display:#0d120e;
-    --text:#fff;
-    --heading:#8bd69c;
-    --button:#303b32;
-    --operator:#355b40;
-    --special:#604b36;
-    --equals:#71b77d;
-    --equals-text:#101810;
-    --cursor:#26352a;
-    --shadow:#0008;
+    --bg:#101410; --card:#1c241e; --display:#0d120e;
+    --text:#fff; --heading:#8bd69c; --button:#303b32;
+    --operator:#355b40; --special:#604b36;
+    --equals:#71b77d; --equals-text:#101810;
+    --cursor:#26352a; --shadow:#0008;
 }
 
 body[data-theme="dark"] {
@@ -80,7 +73,6 @@ body {
     justify-content:center;
     align-items:center;
     padding:18px;
-    transition:.2s;
 }
 
 .app { width:100%; max-width:650px; }
@@ -101,13 +93,13 @@ body {
     margin-bottom:15px;
 }
 
+.topbar h2 { flex:1; }
+
 h2,h3 {
     text-align:center;
     color:var(--heading);
     margin:8px 0;
 }
-
-.topbar h2 { flex:1; }
 
 button {
     border:none;
@@ -128,20 +120,15 @@ button:active {
 
 .operator { background:var(--operator); }
 .special { background:var(--special); }
-.equals { background:var(--equals); color:var(--equals-text); }
-.power { background:var(--equals); color:var(--equals-text); }
-
-.settings-open {
-    width:46px;
-    min-height:43px;
-    font-size:23px;
-    background:var(--operator);
+.equals,.power {
+    background:var(--equals);
+    color:var(--equals-text);
 }
 
-.graph-open {
+.settings-open,.graph-open {
     min-height:43px;
     background:var(--operator);
-    font-size:19px;
+    font-size:21px;
 }
 
 .display {
@@ -163,8 +150,10 @@ button:active {
     text-align:right;
     font-family:Arial,sans-serif;
     caret-color:var(--heading);
-    user-select:none;
     white-space:nowrap;
+    user-select:text;
+    cursor:text;
+    -webkit-user-select:text;
 }
 
 .buttons {
@@ -182,25 +171,24 @@ button:active {
 }
 
 .scientific .special { background:var(--special); }
+
 .scientific .power {
     background:var(--equals);
     color:var(--equals-text);
-    font-weight:bold;
 }
 
-/* SETTINGS */
+.settings,.graph-panel { display:none; }
+.settings.active,.graph-panel.active { display:block; }
 
-.settings { display:none; }
-.settings.active { display:block; }
-
-.settings-title {
+.settings-title,.graph-title {
     display:flex;
     justify-content:space-between;
     align-items:center;
+    gap:8px;
     margin-bottom:20px;
 }
 
-.settings-title h2 { margin:0; }
+.settings-title h2,.graph-title h2 { margin:0; }
 
 .back-button {
     min-height:42px;
@@ -209,10 +197,10 @@ button:active {
     font-size:16px;
 }
 
-.settings-description {
+.settings-description,.graph-hint {
     opacity:.7;
     font-size:14px;
-    margin-bottom:15px;
+    line-height:1.5;
 }
 
 .theme-list {
@@ -233,33 +221,15 @@ button:active {
     font-size:16px;
 }
 
-.theme-option.selected {
-    border:2px solid var(--heading);
-}
+.theme-option.selected { border:2px solid var(--heading); }
+.theme-option .preview { font-size:22px; font-weight:bold; }
 
-.theme-option .preview {
-    font-size:22px;
-    font-weight:bold;
-}
-
-.theme-option[data-choice="matrix"] {
-    background:#071b10;color:#00ff66;
-}
-.theme-option[data-choice="dark"] {
-    background:#252525;color:white;
-}
-.theme-option[data-choice="light"] {
-    background:#eee;color:#222;
-}
-.theme-option[data-choice="ocean"] {
-    background:#142c45;color:#78caff;
-}
-.theme-option[data-choice="sunset"] {
-    background:#3c2029;color:#ffb58e;
-}
-.theme-option[data-choice="amoled"] {
-    background:#000;color:white;
-}
+.theme-option[data-choice="matrix"] { background:#071b10;color:#00ff66; }
+.theme-option[data-choice="dark"] { background:#252525;color:white; }
+.theme-option[data-choice="light"] { background:#eee;color:#222; }
+.theme-option[data-choice="ocean"] { background:#142c45;color:#78caff; }
+.theme-option[data-choice="sunset"] { background:#3c2029;color:#ffb58e; }
+.theme-option[data-choice="amoled"] { background:#000;color:white; }
 
 .reset-theme {
     width:100%;
@@ -268,21 +238,6 @@ button:active {
     background:var(--special);
     font-size:16px;
 }
-
-/* ГРАФИКИ */
-
-.graph-panel { display:none; }
-.graph-panel.active { display:block; }
-
-.graph-title {
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:8px;
-    margin-bottom:15px;
-}
-
-.graph-title h2 { margin:0; }
 
 .graph-input {
     width:100%;
@@ -297,32 +252,20 @@ button:active {
     margin:8px 0;
 }
 
-.graph-input:focus {
-    border-color:var(--heading);
-}
-
-.graph-hint {
-    font-size:13px;
-    opacity:.7;
-    line-height:1.5;
-}
-
-.graph-actions {
+.graph-actions,.graph-scale {
     display:grid;
     grid-template-columns:repeat(2,1fr);
     gap:9px;
     margin:10px 0;
 }
 
-.graph-actions button {
+.graph-actions button,.graph-scale button {
     background:var(--operator);
     min-height:47px;
     font-size:16px;
 }
 
-.graph-actions .clear-graphs {
-    background:var(--special);
-}
+.graph-actions .clear-graphs { background:var(--special); }
 
 .graph-canvas-wrap {
     width:100%;
@@ -336,7 +279,6 @@ button:active {
     display:block;
     width:100%;
     height:340px;
-    touch-action:pan-y;
 }
 
 .graph-status {
@@ -368,45 +310,13 @@ button:active {
     min-height:35px;
     width:38px;
     background:var(--special);
-    font-size:17px;
-}
-
-.graph-color {
-    display:inline-block;
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    margin-right:7px;
-}
-
-.graph-scale {
-    display:flex;
-    gap:9px;
-    margin-top:10px;
-}
-
-.graph-scale button {
-    flex:1;
-    background:var(--cursor);
 }
 
 @media(min-width:700px) {
     .app { max-width:650px; }
-
-    .calculator,.scientific,.settings,.graph-panel {
-        padding:25px;
-    }
-
-    button {
-        min-height:65px;
-        font-size:23px;
-    }
-
-    .scientific button {
-        min-height:60px;
-        font-size:21px;
-    }
-
+    .calculator,.scientific,.settings,.graph-panel { padding:25px; }
+    button { min-height:65px; font-size:23px; }
+    .scientific button { min-height:60px; font-size:21px; }
     #current { font-size:42px; }
     #graphCanvas { height:420px; }
 }
@@ -417,8 +327,6 @@ button:active {
 
 <div class="app">
 
-<!-- КАЛЬКУЛЯТОР -->
-
 <div class="calculator" id="calculator">
 
 <div class="topbar">
@@ -428,192 +336,207 @@ button:active {
 </div>
 
 <div class="display">
-    <input id="current" type="text"
-        value=""
+    <input
+        id="current"
+        type="text"
         placeholder="0"
         autocomplete="off"
         spellcheck="false"
         inputmode="none"
-        readonly>
+        enterkeyhint="done"
+    >
 </div>
 
 <div class="buttons">
+    <button class="special" onclick="clearAll()">AC</button>
+    <button class="special" onclick="backspace()">⌫</button>
+    <button class="special" onclick="percent()">%</button>
+    <button class="operator" onclick="insert('/')">÷</button>
 
-<button class="special" onclick="clearAll()">AC</button>
-<button class="special" onclick="backspace()">⌫</button>
-<button class="special" onclick="percent()">%</button>
-<button class="operator" onclick="insert('/')">÷</button>
+    <button onclick="insert('7')">7</button>
+    <button onclick="insert('8')">8</button>
+    <button onclick="insert('9')">9</button>
+    <button class="operator" onclick="insert('*')">×</button>
 
-<button onclick="insert('7')">7</button>
-<button onclick="insert('8')">8</button>
-<button onclick="insert('9')">9</button>
-<button class="operator" onclick="insert('*')">×</button>
+    <button onclick="insert('4')">4</button>
+    <button onclick="insert('5')">5</button>
+    <button onclick="insert('6')">6</button>
+    <button class="operator" onclick="insert('-')">−</button>
 
-<button onclick="insert('4')">4</button>
-<button onclick="insert('5')">5</button>
-<button onclick="insert('6')">6</button>
-<button class="operator" onclick="insert('-')">−</button>
+    <button onclick="insert('1')">1</button>
+    <button onclick="insert('2')">2</button>
+    <button onclick="insert('3')">3</button>
+    <button class="operator" onclick="insert('+')">+</button>
 
-<button onclick="insert('1')">1</button>
-<button onclick="insert('2')">2</button>
-<button onclick="insert('3')">3</button>
-<button class="operator" onclick="insert('+')">+</button>
-
-<button class="zero" onclick="insert('0')">0</button>
-<button onclick="insert('.')">.</button>
-<button class="equals" onclick="calculate()">=</button>
-
+    <button class="zero" onclick="insert('0')">0</button>
+    <button onclick="insert('.')">.</button>
+    <button class="equals" onclick="calculate()">=</button>
 </div>
 </div>
-
-<!-- НАУЧНЫЕ ФУНКЦИИ -->
 
 <div class="scientific" id="scientific">
-
 <h3>НАУЧНЫЕ ФУНКЦИИ</h3>
 
 <div class="buttons">
+    <button class="power" onclick="insert('^')">xʸ</button>
+    <button onclick="insert('^2')">x²</button>
+    <button onclick="insert('^3')">x³</button>
+    <button onclick="squareRoot()">√</button>
 
-<button class="power" onclick="insert('^')">xʸ</button>
-<button onclick="insert('^2')">x²</button>
-<button onclick="insert('^3')">x³</button>
-<button onclick="squareRoot()">√</button>
+    <button onclick="trig('sin')">sin</button>
+    <button onclick="trig('cos')">cos</button>
+    <button onclick="trig('tan')">tan</button>
+    <button onclick="insert('Math.PI')">π</button>
 
-<button onclick="trig('sin')">sin</button>
-<button onclick="trig('cos')">cos</button>
-<button onclick="trig('tan')">tan</button>
-<button onclick="insert('Math.PI')">π</button>
+    <button onclick="logarithm()">log</button>
+    <button onclick="naturalLog()">ln</button>
+    <button onclick="insert('(')">(</button>
+    <button onclick="insert(')')">)</button>
 
-<button onclick="logarithm()">log</button>
-<button onclick="naturalLog()">ln</button>
-<button onclick="insert('(')">(</button>
-<button onclick="insert(')')">)</button>
-
-<button onclick="fraction()">a/b</button>
-<button onclick="toggleSign()">±</button>
-<button onclick="factorial()">n!</button>
-<button onclick="insert('.')">,</button>
-
+    <button onclick="fraction()">a/b</button>
+    <button onclick="toggleSign()">±</button>
+    <button onclick="factorial()">n!</button>
+    <button onclick="insert('.')">,</button>
 </div>
 </div>
-
-<!-- ГРАФИКИ -->
 
 <div class="graph-panel" id="graphPanel">
+    <div class="graph-title">
+        <h2>📈 ГРАФИКИ</h2>
+        <button class="back-button" onclick="closeGraph()">← Назад</button>
+    </div>
 
-<div class="graph-title">
-    <h2>📈 ГРАФИКИ</h2>
-    <button class="back-button" onclick="closeGraph()">← Назад</button>
+    <p class="graph-hint">
+        Введи функцию от x. Например: x^2, 2*x+5, sin(x), cos(x).
+    </p>
+
+    <input
+        id="graphExpression"
+        class="graph-input"
+        type="text"
+        placeholder="Например: x^2"
+        autocomplete="off"
+        spellcheck="false"
+        inputmode="none"
+    >
+
+    <div class="graph-actions">
+        <button onclick="addGraph()">＋ Построить</button>
+        <button class="clear-graphs" onclick="clearGraphs()">Очистить</button>
+    </div>
+
+    <div class="graph-canvas-wrap">
+        <canvas id="graphCanvas"></canvas>
+    </div>
+
+    <div class="graph-scale">
+        <button onclick="zoomGraph(1.5)">＋ Приблизить</button>
+        <button onclick="zoomGraph(1/1.5)">－ Отдалить</button>
+        <button onclick="resetGraph()">Сброс</button>
+    </div>
+
+    <p class="graph-status" id="graphStatus">
+        Введи функцию и нажми «Построить».
+    </p>
+
+    <h3>МОИ ГРАФИКИ</h3>
+    <div class="graph-list" id="graphList"></div>
 </div>
-
-<p class="graph-hint">
-Введи функцию от x. Например: x^2, 2*x+5, sin(x), cos(x).
-Можно добавлять несколько функций.
-</p>
-
-<input
-    id="graphExpression"
-    class="graph-input"
-    type="text"
-    placeholder="Например: x^2"
-    autocomplete="off"
-    spellcheck="false"
->
-
-<div class="graph-actions">
-    <button onclick="addGraph()">＋ Построить</button>
-    <button class="clear-graphs" onclick="clearGraphs()">Очистить</button>
-</div>
-
-<div class="graph-canvas-wrap">
-    <canvas id="graphCanvas"></canvas>
-</div>
-
-<div class="graph-scale">
-    <button onclick="zoomGraph(1.5)">＋ Приблизить</button>
-    <button onclick="zoomGraph(1/1.5)">－ Отдалить</button>
-    <button onclick="resetGraph()">Сброс</button>
-</div>
-
-<p class="graph-status" id="graphStatus">
-    Введи функцию и нажми «Построить».
-</p>
-
-<h3>МОИ ГРАФИКИ</h3>
-<div class="graph-list" id="graphList"></div>
-
-</div>
-
-<!-- НАСТРОЙКИ -->
 
 <div class="settings" id="settings">
+    <div class="settings-title">
+        <h2>НАСТРОЙКИ</h2>
+        <button class="back-button" onclick="closeSettings()">← Назад</button>
+    </div>
 
-<div class="settings-title">
-    <h2>НАСТРОЙКИ</h2>
-    <button class="back-button" onclick="closeSettings()">← Назад</button>
+    <h3>Оформление</h3>
+    <p class="settings-description">
+        Выбери тему для своего калькулятора.
+        Изменения применяются сразу.
+    </p>
+
+    <div class="theme-list">
+        <button class="theme-option" data-choice="matrix" onclick="setTheme('matrix')">
+            <span class="preview">123 + 456</span>
+            <span>🟢 Matrix</span>
+        </button>
+
+        <button class="theme-option" data-choice="dark" onclick="setTheme('dark')">
+            <span class="preview">123 + 456</span>
+            <span>⚫ Dark</span>
+        </button>
+
+        <button class="theme-option" data-choice="light" onclick="setTheme('light')">
+            <span class="preview">123 + 456</span>
+            <span>⚪ Light</span>
+        </button>
+
+        <button class="theme-option" data-choice="ocean" onclick="setTheme('ocean')">
+            <span class="preview">123 + 456</span>
+            <span>🔵 Ocean</span>
+        </button>
+
+        <button class="theme-option" data-choice="sunset" onclick="setTheme('sunset')">
+            <span class="preview">123 + 456</span>
+            <span>🟠 Sunset</span>
+        </button>
+
+        <button class="theme-option" data-choice="amoled" onclick="setTheme('amoled')">
+            <span class="preview">123 + 456</span>
+            <span>⚫ AMOLED</span>
+        </button>
+    </div>
+
+    <button class="reset-theme" onclick="setTheme('matrix')">
+        Вернуть стандартную тему
+    </button>
 </div>
 
-<h3>Оформление</h3>
-
-<p class="settings-description">
-Выбери тему для своего калькулятора.
-Изменения применяются сразу.
-</p>
-
-<div class="theme-list">
-
-<button class="theme-option" data-choice="matrix" onclick="setTheme('matrix')">
-    <span class="preview">123 + 456</span>
-    <span>🟢 Matrix</span>
-</button>
-
-<button class="theme-option" data-choice="dark" onclick="setTheme('dark')">
-    <span class="preview">123 + 456</span>
-    <span>⚫ Dark</span>
-</button>
-
-<button class="theme-option" data-choice="light" onclick="setTheme('light')">
-    <span class="preview">123 + 456</span>
-    <span>⚪ Light</span>
-</button>
-
-<button class="theme-option" data-choice="ocean" onclick="setTheme('ocean')">
-    <span class="preview">123 + 456</span>
-    <span>🔵 Ocean</span>
-</button>
-
-<button class="theme-option" data-choice="sunset" onclick="setTheme('sunset')">
-    <span class="preview">123 + 456</span>
-    <span>🟠 Sunset</span>
-</button>
-
-<button class="theme-option" data-choice="amoled" onclick="setTheme('amoled')">
-    <span class="preview">123 + 456</span>
-    <span>⚫ AMOLED</span>
-</button>
-
-</div>
-
-<button class="reset-theme" onclick="setTheme('matrix')">
-    Вернуть стандартную тему
-</button>
-
-</div>
-
-</div>
-
-<script>
-
+    </div>
+    <script>
 const input = document.getElementById("current");
 
 let expression = "";
 let cursor = 0;
+let selectionEnd = 0;
 let resetNext = false;
+
+/* КУРСОР И ВЫДЕЛЕНИЕ */
+
+function sync() {
+    expression = input.value;
+
+    cursor = input.selectionStart ?? expression.length;
+    selectionEnd = input.selectionEnd ?? cursor;
+}
+
+function update() {
+    input.value = expression;
+
+    cursor = Math.max(0, Math.min(cursor, expression.length));
+    selectionEnd = Math.max(cursor, Math.min(selectionEnd, expression.length));
+
+    input.focus({ preventScroll:true });
+    input.setSelectionRange(cursor, selectionEnd);
+}
+
+input.addEventListener("click", sync);
+input.addEventListener("keyup", sync);
+input.addEventListener("select", sync);
+input.addEventListener("input", () => {
+    sync();
+});
+
+input.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        calculate();
+    }
+});
 
 /* ТЕМЫ */
 
 function setTheme(theme) {
-
     const allowed = [
         "matrix","dark","light",
         "ocean","sunset","amoled"
@@ -624,7 +547,7 @@ function setTheme(theme) {
     document.body.dataset.theme = theme;
 
     try {
-        localStorage.setItem("calculatorTheme",theme);
+        localStorage.setItem("calculatorTheme", theme);
     } catch(e) {}
 
     document.querySelectorAll(".theme-option").forEach(button => {
@@ -650,223 +573,251 @@ function loadTheme() {
 /* ОКНА */
 
 function openSettings() {
-    document.getElementById("calculator").style.display="none";
-    document.getElementById("scientific").style.display="none";
-    document.getElementById("graphPanel").style.display="none";
+    document.getElementById("calculator").style.display = "none";
+    document.getElementById("scientific").style.display = "none";
+    document.getElementById("graphPanel").style.display = "none";
     document.getElementById("settings").classList.add("active");
 }
 
 function closeSettings() {
     document.getElementById("settings").classList.remove("active");
-    document.getElementById("calculator").style.display="";
-    document.getElementById("scientific").style.display="";
+    document.getElementById("calculator").style.display = "";
+    document.getElementById("scientific").style.display = "";
 }
 
 function openGraph() {
-    document.getElementById("calculator").style.display="none";
-    document.getElementById("scientific").style.display="none";
+    document.getElementById("calculator").style.display = "none";
+    document.getElementById("scientific").style.display = "none";
     document.getElementById("settings").classList.remove("active");
 
-    const panel = document.getElementById("graphPanel");
-    panel.style.display="block";
-    panel.classList.add("active");
+    document.getElementById("graphPanel").style.display = "block";
+    document.getElementById("graphPanel").classList.add("active");
 
     drawGraphs();
 }
 
 function closeGraph() {
-    document.getElementById("graphPanel").style.display="none";
+    document.getElementById("graphPanel").style.display = "none";
     document.getElementById("graphPanel").classList.remove("active");
-    document.getElementById("calculator").style.display="";
-    document.getElementById("scientific").style.display="";
+    document.getElementById("calculator").style.display = "";
+    document.getElementById("scientific").style.display = "";
 }
 
-/* КАЛЬКУЛЯТОР */
-
-function sync() {
-    expression = input.value;
-}
-
-function update() {
-    input.value=expression;
-    cursor=Math.min(cursor,expression.length);
-}
+/* ВСТАВКА СИМВОЛОВ */
 
 function insert(value) {
     sync();
 
-    if(resetNext) {
-        expression="";
-        cursor=0;
-        resetNext=false;
+    if (resetNext) {
+        expression = "";
+        cursor = 0;
+        selectionEnd = 0;
+        resetNext = false;
     }
 
-    expression=
-        expression.slice(0,cursor)+
-        value+
-        expression.slice(cursor);
+    const start = Math.min(cursor, selectionEnd);
+    const end = Math.max(cursor, selectionEnd);
 
-    cursor+=value.length;
+    expression =
+        expression.slice(0, start) +
+        value +
+        expression.slice(end);
+
+    cursor = start + value.length;
+    selectionEnd = cursor;
+
     update();
 }
+
+/* ОЧИСТКА */
 
 function clearAll() {
-    expression="";
-    cursor=0;
-    resetNext=false;
+    expression = "";
+    cursor = 0;
+    selectionEnd = 0;
+    resetNext = false;
     update();
 }
+
+/* УДАЛЕНИЕ */
 
 function backspace() {
     sync();
 
-    if(resetNext) {
+    if (resetNext) {
         clearAll();
         return;
     }
 
-    if(cursor>0) {
-        expression=
-            expression.slice(0,cursor-1)+
+    const start = Math.min(cursor, selectionEnd);
+    const end = Math.max(cursor, selectionEnd);
+
+    if (start !== end) {
+        expression =
+            expression.slice(0, start) +
+            expression.slice(end);
+
+        cursor = start;
+    } else if (cursor > 0) {
+        expression =
+            expression.slice(0, cursor - 1) +
             expression.slice(cursor);
+
         cursor--;
     }
 
+    selectionEnd = cursor;
     update();
 }
 
-function getLastNumber() {
-    const before=expression.slice(0,cursor);
+/* ПОСЛЕДНЕЕ ЧИСЛО */
 
-    const match=before.match(
+function getLastNumber() {
+    sync();
+
+    const before = expression.slice(0, cursor);
+
+    const match = before.match(
         /(?:\d+(?:\.\d*)?|\.\d+)$/
     );
 
-    if(!match) return null;
+    if (!match) return null;
 
     return {
-        value:Number(match[0]),
-        start:cursor-match[0].length,
-        end:cursor
+        value: Number(match[0]),
+        start: cursor - match[0].length,
+        end: cursor
     };
 }
 
 function replaceLastNumber(value) {
-    const item=getLastNumber();
-    if(!item) return;
+    const item = getLastNumber();
+    if (!item) return;
 
-    expression=
-        expression.slice(0,item.start)+
-        String(value)+
+    const replacement = String(value);
+
+    expression =
+        expression.slice(0, item.start) +
+        replacement +
         expression.slice(item.end);
 
-    cursor=item.start+String(value).length;
+    cursor = item.start + replacement.length;
+    selectionEnd = cursor;
+
     update();
 }
 
 function percent() {
-    const item=getLastNumber();
-    if(!item) return;
-    replaceLastNumber(item.value/100);
+    const item = getLastNumber();
+    if (!item) return;
+
+    replaceLastNumber(item.value / 100);
 }
 
 function toggleSign() {
-    const item=getLastNumber();
-    if(!item) return;
+    const item = getLastNumber();
+    if (!item) return;
+
     replaceLastNumber(-item.value);
 }
 
 function squareRoot() {
-    const item=getLastNumber();
-    if(!item || item.value<0) return;
+    const item = getLastNumber();
+
+    if (!item || item.value < 0) return;
+
     replaceLastNumber(Math.sqrt(item.value));
 }
 
 function trig(type) {
-    const item=getLastNumber();
-    if(!item) return;
+    const item = getLastNumber();
+    if (!item) return;
 
-    const radians=item.value*Math.PI/180;
+    const radians = item.value * Math.PI / 180;
     let result;
 
-    if(type==="sin") result=Math.sin(radians);
-    if(type==="cos") result=Math.cos(radians);
-    if(type==="tan") result=Math.tan(radians);
+    if (type === "sin") result = Math.sin(radians);
+    if (type === "cos") result = Math.cos(radians);
+    if (type === "tan") result = Math.tan(radians);
 
-    if(!Number.isFinite(result)) return;
+    if (!Number.isFinite(result)) return;
 
     replaceLastNumber(Number(result.toPrecision(12)));
 }
 
 function logarithm() {
-    const item=getLastNumber();
-    if(!item || item.value<=0) return;
+    const item = getLastNumber();
+
+    if (!item || item.value <= 0) return;
+
     replaceLastNumber(Math.log10(item.value));
 }
 
 function naturalLog() {
-    const item=getLastNumber();
-    if(!item || item.value<=0) return;
+    const item = getLastNumber();
+
+    if (!item || item.value <= 0) return;
+
     replaceLastNumber(Math.log(item.value));
 }
 
 function fraction() {
-    const item=getLastNumber();
-    if(!item) return;
     insert("/");
 }
 
 function factorial() {
-    const item=getLastNumber();
+    const item = getLastNumber();
 
-    if(!item || item.value<0 ||
-       !Number.isInteger(item.value) ||
-       item.value>170) return;
+    if (
+        !item ||
+        item.value < 0 ||
+        !Number.isInteger(item.value) ||
+        item.value > 170
+    ) return;
 
-    let result=1;
+    let result = 1;
 
-    for(let i=2;i<=item.value;i++) {
-        result*=i;
+    for (let i = 2; i <= item.value; i++) {
+        result *= i;
     }
 
     replaceLastNumber(result);
 }
 
-/* ВЫЧИСЛЕНИЕ ОБЫЧНЫХ ПРИМЕРОВ */
+/* МАТЕМАТИЧЕСКИЙ ПАРСЕР */
 
 function evaluate(source) {
+    source = source.replace(/\s/g, "");
 
-    source=source.replace(/\s/g,"");
-
-    const tokens=source.match(
+    const tokens = source.match(
         /(?:\d+(?:\.\d*)?|\.\d+)|Math\.PI|[()+\-*/^]/g
     );
 
-    if(!tokens || tokens.join("")!==source) {
+    if (!tokens || tokens.join("") !== source) {
         throw new Error("Ошибка выражения");
     }
 
-    let position=0;
+    let position = 0;
 
     function primary() {
-        let token=tokens[position];
+        const token = tokens[position];
 
-        if(token==="(") {
+        if (token === "(") {
             position++;
-            let value=add();
+            const value = add();
 
-            if(tokens[position]!==")") throw new Error();
+            if (tokens[position] !== ")") throw new Error();
 
             position++;
             return value;
         }
 
-        if(token==="Math.PI") {
+        if (token === "Math.PI") {
             position++;
             return Math.PI;
         }
 
-        if(token===undefined || !Number.isFinite(Number(token))) {
+        if (token === undefined || !Number.isFinite(Number(token))) {
             throw new Error();
         }
 
@@ -875,23 +826,23 @@ function evaluate(source) {
     }
 
     function power() {
-        let value=primary();
+        let value = primary();
 
-        if(tokens[position]==="^") {
+        if (tokens[position] === "^") {
             position++;
-            value=Math.pow(value,unary());
+            value = Math.pow(value, unary());
         }
 
         return value;
     }
 
     function unary() {
-        if(tokens[position]==="-") {
+        if (tokens[position] === "-") {
             position++;
             return -unary();
         }
 
-        if(tokens[position]==="+") {
+        if (tokens[position] === "+") {
             position++;
             return unary();
         }
@@ -900,34 +851,40 @@ function evaluate(source) {
     }
 
     function multiply() {
-        let value=unary();
+        let value = unary();
 
-        while(tokens[position]==="*" || tokens[position]==="/") {
-            let op=tokens[position++];
+        while (
+            tokens[position] === "*" ||
+            tokens[position] === "/"
+        ) {
+            const op = tokens[position++];
 
-            if(op==="*") value*=unary();
-            else value/=unary();
+            if (op === "*") value *= unary();
+            else value /= unary();
         }
 
         return value;
     }
 
     function add() {
-        let value=multiply();
+        let value = multiply();
 
-        while(tokens[position]==="+" || tokens[position]==="-") {
-            let op=tokens[position++];
+        while (
+            tokens[position] === "+" ||
+            tokens[position] === "-"
+        ) {
+            const op = tokens[position++];
 
-            if(op==="+") value+=multiply();
-            else value-=multiply();
+            if (op === "+") value += multiply();
+            else value -= multiply();
         }
 
         return value;
     }
 
-    let result=add();
+    const result = add();
 
-    if(position!==tokens.length || !Number.isFinite(result)) {
+    if (position !== tokens.length || !Number.isFinite(result)) {
         throw new Error();
     }
 
@@ -935,24 +892,31 @@ function evaluate(source) {
 }
 
 function calculate() {
-    if(!expression) return;
+    sync();
+
+    if (!expression) return;
 
     try {
-    const result = evaluate(expression);
+        const result = evaluate(expression);
 
-    expression = String(Number(result.toPrecision(12)));
-    cursor = expression.length;
-    resetNext = true;
-    update();
+        expression = String(Number(result.toPrecision(12)));
+        cursor = expression.length;
+        selectionEnd = cursor;
+        resetNext = true;
 
-} catch (error) {
-    expression = "Ошибка";
-    cursor = expression.length;
-    resetNext = true;
-    update();
+        update();
+
+    } catch (error) {
+        expression = "Ошибка";
+        cursor = expression.length;
+        selectionEnd = cursor;
+        resetNext = true;
+
+        update();
+    }
 }
-}
-    /* ПАРСЕР ФУНКЦИЙ ДЛЯ ГРАФИКОВ */
+
+/* ПАРСЕР ФУНКЦИЙ ДЛЯ ГРАФИКОВ */
 
 function evaluateFunction(source, x) {
     source = source
@@ -969,13 +933,16 @@ function evaluateFunction(source, x) {
     }
 
     const allowed = [
-        "x", "pi", "sin", "cos", "tan",
-        "sqrt", "log", "ln", "abs"
+        "x","pi","sin","cos","tan",
+        "sqrt","log","ln","abs"
     ];
 
     for (const token of tokens) {
-        if (/^[a-zA-Z]+$/.test(token) && !allowed.includes(token)) {
-            throw new Error("Неизвестная функция: " + token);
+        if (
+            /^[a-zA-Z]+$/.test(token) &&
+            !allowed.includes(token)
+        ) {
+            throw new Error("Неизвестная функция");
         }
     }
 
@@ -1004,7 +971,10 @@ function evaluateFunction(source, x) {
             return Math.PI;
         }
 
-        if (["sin", "cos", "tan", "sqrt", "log", "ln", "abs"].includes(token)) {
+        if ([
+            "sin","cos","tan","sqrt",
+            "log","ln","abs"
+        ].includes(token)) {
             position++;
 
             if (tokens[position] !== "(") throw new Error();
@@ -1063,7 +1033,10 @@ function evaluateFunction(source, x) {
     function multiply() {
         let value = unary();
 
-        while (tokens[position] === "*" || tokens[position] === "/") {
+        while (
+            tokens[position] === "*" ||
+            tokens[position] === "/"
+        ) {
             const op = tokens[position++];
 
             if (op === "*") value *= unary();
@@ -1076,7 +1049,10 @@ function evaluateFunction(source, x) {
     function add() {
         let value = multiply();
 
-        while (tokens[position] === "+" || tokens[position] === "-") {
+        while (
+            tokens[position] === "+" ||
+            tokens[position] === "-"
+        ) {
             const op = tokens[position++];
 
             if (op === "+") value += multiply();
@@ -1095,8 +1071,7 @@ function evaluateFunction(source, x) {
     return result;
 }
 
-
-/* СИСТЕМА ГРАФИКОВ */
+/* ГРАФИКИ */
 
 let graphs = [];
 let graphMin = -10;
@@ -1111,8 +1086,8 @@ const graphColors = [
 ];
 
 function addGraph() {
-    const input = document.getElementById("graphInput");
-    const source = input.value.trim();
+    const field = document.getElementById("graphExpression");
+    const source = field.value.trim();
 
     if (!source) {
         setGraphStatus("Введи функцию, например x^2");
@@ -1127,10 +1102,13 @@ function addGraph() {
             color: graphColors[graphs.length % graphColors.length]
         });
 
-        input.value = "";
+        field.value = "";
+
         updateGraphList();
         drawGraphs();
+
         setGraphStatus("График построен");
+
     } catch (error) {
         setGraphStatus("Ошибка в записи функции");
     }
@@ -1152,20 +1130,11 @@ function removeGraph(index) {
 function updateGraphList() {
     const list = document.getElementById("graphList");
 
-    if (!list) return;
-
     list.innerHTML = "";
 
     graphs.forEach((graph, index) => {
         const item = document.createElement("div");
-
-        item.style.display = "flex";
-        item.style.justifyContent = "space-between";
-        item.style.alignItems = "center";
-        item.style.padding = "8px";
-        item.style.marginTop = "5px";
-        item.style.borderRadius = "8px";
-        item.style.background = "rgba(255,255,255,0.08)";
+        item.className = "graph-item";
 
         const name = document.createElement("span");
         name.textContent = "y = " + graph.expression;
@@ -1182,11 +1151,7 @@ function updateGraphList() {
 }
 
 function setGraphStatus(message) {
-    const status = document.getElementById("graphStatus");
-
-    if (status) {
-        status.textContent = message;
-    }
+    document.getElementById("graphStatus").textContent = message;
 }
 
 function zoomGraph(direction) {
@@ -1194,8 +1159,8 @@ function zoomGraph(direction) {
     const range = (graphMax - graphMin) / 2;
 
     const newRange = direction > 0
-        ? range * 0.8
-        : range * 1.25;
+        ? range / 1.5
+        : range * 1.5;
 
     graphMin = center - newRange;
     graphMax = center + newRange;
@@ -1211,13 +1176,19 @@ function resetGraph() {
 
 function drawGraphs() {
     const canvas = document.getElementById("graphCanvas");
-
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const rect = canvas.getBoundingClientRect();
+    const ratio = window.devicePixelRatio || 1;
 
-    const width = canvas.width;
-    const height = canvas.height;
+    canvas.width = rect.width * ratio;
+    canvas.height = rect.height * ratio;
+
+    const ctx = canvas.getContext("2d");
+    ctx.scale(ratio, ratio);
+
+    const width = rect.width;
+    const height = rect.height;
 
     ctx.clearRect(0, 0, width, height);
 
@@ -1238,17 +1209,17 @@ function drawGraphs() {
     ctx.lineWidth = 1;
 
     for (let i = Math.ceil(graphMin); i <= graphMax; i++) {
-        const x = toCanvasX(i);
-        const y = toCanvasY(i);
+        const px = toCanvasX(i);
+        const py = toCanvasY(i);
 
         ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
+        ctx.moveTo(px, 0);
+        ctx.lineTo(px, height);
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
+        ctx.moveTo(0, py);
+        ctx.lineTo(width, py);
         ctx.stroke();
     }
 
@@ -1266,7 +1237,7 @@ function drawGraphs() {
     ctx.lineTo(width, toCanvasY(0));
     ctx.stroke();
 
-    // Графики функций
+    // Функции
     graphs.forEach(graph => {
         ctx.strokeStyle = graph.color;
         ctx.lineWidth = 2;
@@ -1281,7 +1252,10 @@ function drawGraphs() {
                 const y = evaluateFunction(graph.expression, x);
                 const canvasY = toCanvasY(y);
 
-                if (!Number.isFinite(canvasY) || Math.abs(canvasY) > height * 3) {
+                if (
+                    !Number.isFinite(canvasY) ||
+                    Math.abs(canvasY) > height * 3
+                ) {
                     started = false;
                     continue;
                 }
@@ -1292,6 +1266,7 @@ function drawGraphs() {
                 } else {
                     ctx.lineTo(pixel, canvasY);
                 }
+
             } catch (error) {
                 started = false;
             }
@@ -1301,26 +1276,22 @@ function drawGraphs() {
     });
 }
 
+/* ENTER В ПОЛЕ ГРАФИКА */
 
-// Обновление графика при изменении размера окна
-window.addEventListener("resize", drawGraphs);
-
-
-// Построение графика по Enter
-const graphInput = document.getElementById("graphInput");
-
-if (graphInput) {
-    graphInput.addEventListener("keydown", event => {
+document.getElementById("graphExpression")
+    .addEventListener("keydown", event => {
         if (event.key === "Enter") {
+            event.preventDefault();
             addGraph();
         }
     });
-}
 
+/* ЗАПУСК */
 
-// Запуск калькулятора
 loadTheme();
 update();
+
+window.addEventListener("resize", drawGraphs);
 
 </script>
 </body>
